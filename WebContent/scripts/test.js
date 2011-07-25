@@ -11,7 +11,7 @@ var w = $(document).width(),
     nodes = [],
     links = [],
     linkArray = new Object(),
-    recipeMax = 0,
+    recipeMax = [],
     activeD = null;
 
 var vis = d3.select("#content")
@@ -40,8 +40,9 @@ force.on("tick", function() {
 	  .attr("x2", function(d) { return d.target.x; })
 	  .attr("y2", function(d) { return d.target.y; });
 
-	 vis.selectAll("circle.node").attr("cx", function(d) { return d.x; })
-	  .attr("cy", function(d) { return d.y; });
+	 //vis.selectAll("g.node").attr("cx", function(d) { return d.x; })
+	  //.attr("cy", function(d) { return d.y; });
+	 vis.selectAll("g.node").attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 });
 
 
@@ -97,7 +98,6 @@ function makeLinks(recipemap){
 						link.names.push(recipe);
 						links[k] = link;
 						found=true;
-						recipeMax = Math.max(recipeMax, link.count);
 						break;
 					}
 				}
@@ -122,6 +122,14 @@ function makeLinks(recipemap){
 			linkArray[targetindex] = new Array();
 		
 		linkArray[targetindex].push(links[i]);		
+	}
+	
+	
+	for(var i in linkArray){
+		recipeMax[i] = 0;
+		for(var j in linkArray[i]){
+			recipeMax[i] = Math.max(recipeMax[i], linkArray[i][j].count);
+		}
 	}
 }
 
@@ -150,39 +158,59 @@ function start(){
     	  
       })*/
 
-	var node = vis.selectAll("circle.node")
-      .data(nodes)
-    .enter().insert("svg:circle")
-      .attr("class", "node")
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
-      .attr("r", function(d){return 2+d.recipenum/2;})
-      .style("fill", "steelblue")
-      .call(force.drag)
-      .text(function(d) { return d.name; })
-      .on("mouseover", function(d, i){
-    	  
-          link.data(linkArray[i])
-        .enter().insert("svg:line")
-          .attr("class", "link")
-          .style("stroke-width", function(d) { return d.count;})//return Math.sqrt(d.value); })
-      .style("stroke", function(d){ return "black"; })
-      .style("opacity", 0)//return fill(d.id);
-      .transition().style("opacity", function(d){ return 1*(d.count/recipeMax);})
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-    	  //restart();
+	var node = vis.selectAll("g.node")
+    .data(nodes)
+    .enter().append("svg:g")
+     .attr("class", "node")
+     .on("mouseover", function(d, i){
+	         link.data(linkArray[i])
+	         .enter().insert("svg:line", "g.node")
+	         .attr("class", "link")
+	         .style("stroke-width", function(d) { return d.count;})//return Math.sqrt(d.value); })
+	         .style("stroke", function(d){ return "black"; })
+	         .style("opacity", 0)//return fill(d.id);
+		      .transition().style("opacity", function(d){ return 0.9*(d.count/recipeMax[i]);})
+		      .attr("x1", function(d) { return d.source.x; })
+		      .attr("y1", function(d) { return d.source.y; })
+		      .attr("x2", function(d) { return d.target.x; })
+		      .attr("y2", function(d) { return d.target.y; });
       })
       .on("mouseout",function(d,i){
     	  
     	  vis.selectAll("line.link").transition().style("opacity", 0).remove();
-    	  //restart();
-      });
+      })
+      .call(force.drag);
+	
+	
+    node.append("svg:circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", function(d){return 2+d.recipenum/2;})
+      .style("fill", "#9fc054");
 	
 	node.append("svg:title")
 	.text(function(d) { return d.name; });
+	
+	node.append("svg:text")
+    .attr("class", "nodetext")
+    .attr("dx", function(d){
+    	var $this = $(this);
+    	var r = $this.siblings("circle")[0].r.baseVal.value;
+    	if(d.name.length < r / 3){
+    		return 0;
+    	}    		
+    	else return r + 2;
+    })
+    .attr("dy", ".35em")
+    .text(function(d) { return d.name; })
+    .attr("text-anchor", function(d){
+    	var $this = $(this);
+    	var r = $this.siblings("circle")[0].r.baseVal.value;
+    	if(d.name.length < r / 3)
+    		return "middle";
+    	return "left";
+    	});
+    
 
 	link.append("svg:title")
 	.text(function(d) { return d.names; });

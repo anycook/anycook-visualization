@@ -1,4 +1,4 @@
-circle.node {
+.node circle {
   stroke: #fff;
   stroke-width: 1.5px;
 }
@@ -7,3 +7,5 @@ line.link {
   stroke: #999;
   stroke-opacity: 1;
 }
+
+.nodetext { pointer-events: none; font: 10px sans-serif; }
