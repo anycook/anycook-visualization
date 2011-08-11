@@ -12,7 +12,8 @@ var w = $(document).width(),
     links = [],
     linkArray = new Object(),
     recipeMax = [],
-    activeD = null;
+    activeD = null,
+    recipemap = new Object();
 
 var vis = d3.select("#content")
   .append("svg:svg")
@@ -48,11 +49,12 @@ force.on("tick", function() {
 
 $.getJSON('http://graph.anycook.de/ingredient?parent&callback=?', function(json) {
 	//var ingredients = new Array();
-	var recipemap = new Object();
 	$(json.ingredients).each(function(i, value){
 		$.getJSON("http://graph.anycook.de/ingredient/"+value+"?children&callback=?", function(ingredient){
-			nodes.push({"name":ingredient.name, "index":i, "recipenum": ingredient.recipenum});
-			var index = nodes.length-1;
+			var index = nodes.length;
+			ingredient["index"] = index;
+			nodes.push(ingredient);
+			
 			for(var j in ingredient.recipes){
 				var recipe = ingredient.recipes[j];
 				var recipearray = recipemap[recipe];
@@ -64,8 +66,8 @@ $.getJSON('http://graph.anycook.de/ingredient?parent&callback=?', function(json)
 			}
 			//if(nodes.length%20 == 0 || nodes.length == json.ingredients.length)
 			if(nodes.length == json.ingredients.length){
-				 makeLinks(recipemap);
-				 start();
+				makeLinks();
+				start();
 			}
 			
 		}).error(function(){alert("error");});
@@ -82,8 +84,10 @@ $.getJSON('http://graph.anycook.de/ingredient?parent&callback=?', function(json)
 	  .attr("cy", function(d) { return d.y; });
 	});*/
 
-function makeLinks(recipemap){
+function makeLinks(){
+	links = new Array();
 	var recipeID = 0;
+	//vis.selectAll("line.link").remove();
 	//$(recipemap).each(function(recipe, recipearray){
 	for(var recipe in recipemap){
 		var recipearray = recipemap[recipe];
@@ -110,6 +114,7 @@ function makeLinks(recipemap){
 		recipeID++;
 	}
 	
+	linksArray = new Object();
 	for(var i in links){
 		var sourceindex = links[i].source;
 		if(linkArray[sourceindex] == null || linkArray[sourceindex] == undefined)
@@ -132,6 +137,119 @@ function makeLinks(recipemap){
 		}
 	}
 }
+
+function click(d){
+	if(d.children.length == 0) return;
+	
+	var oldLength = nodes.length;
+	
+	var node = d3.selectAll(d);
+	$.getJSON("http://graph.anycook.de/ingredient/"+d.name+"?&callback=?", function(ingredient){
+		
+		
+		
+		node.select("svg:circle").style("fill", "#9fc054");
+		
+		
+		var index = d.index;
+		//ingredient.index = index;
+		//d = ingredient;
+		for(var j in ingredient.recipes){
+			var recipe = ingredient.recipes[j];
+			var recipearray = recipemap[recipe];
+			if(recipearray == null || recipearray== undefined){
+				recipearray = new Array();
+			}
+			recipearray.push(index);
+			recipemap[recipe] = recipearray;
+		}		
+	}).error(function(){alert("error");});
+	
+	$(d.children).each(function(i, value){
+		$.getJSON("http://graph.anycook.de/ingredient/"+value+"?children&callback=?", function(ingredient){
+			var index = nodes.length;
+			ingredient["index"] = index;
+			nodes.push(ingredient);
+			
+			for(var j in ingredient.recipes){
+				var recipe = ingredient.recipes[j];
+				var recipearray = recipemap[recipe];
+				if(recipearray == null || recipearray== undefined){
+					recipearray = new Array();
+				}
+				recipearray.push(index);
+				recipemap[recipe] = recipearray;
+			}
+			
+			//if(nodes.length%20 == 0 || nodes.length == json.ingredients.length)
+			if(nodes.length == oldLength + d.children.length){
+				 makeLinks();
+				 start();
+			}
+			
+		}).error(function(){alert("error");});
+	});
+	
+}
+
+/*function makeNodes(){
+	var node = vis.selectAll("g.node")
+    .data(nodes)
+    .enter().append("svg:g")
+     .attr("class", "node")
+     .on("mouseover", function(d, i){
+	         link.data(linkArray[i])
+	         .enter().insert("svg:line", "g.node")
+	         .attr("class", "link")
+	         .style("stroke-width", function(d) { return d.count;})//return Math.sqrt(d.value); })
+	         .style("stroke", function(d){ return "black"; })
+	         .style("opacity", 0)//return fill(d.id);
+		      .transition().style("opacity", function(d){ return 0.9*(d.count/recipeMax[i]);})
+		      .attr("x1", function(d) { return d.source.x; })
+		      .attr("y1", function(d) { return d.source.y; })
+		      .attr("x2", function(d) { return d.target.x; })
+		      .attr("y2", function(d) { return d.target.y; });
+      })
+      .on("mouseout",function(d,i){
+    	  
+    	  vis.selectAll("line.link").transition().style("opacity", 0).remove();
+      })
+      .on("click", click)
+      .call(force.drag);
+	
+	
+    node.append("svg:circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", function(d){return 2+d.recipenum/2;})
+      .style("fill", function(d){
+    	  if(d.children.length>0)
+    	  	return "#87A347";
+    	  return "#9fc054";});
+	
+	node.append("svg:title")
+	.text(function(d) { return d.name; });
+	
+	node.append("svg:text")
+    .attr("class", "nodetext")
+    .attr("dx", function(d){
+    	var $this = $(this);
+    	var r = $this.siblings("circle")[0].r.baseVal.value;
+    	if(d.name.length < r / 3){
+    		return 0;
+    	}    		
+    	else return r + 2;
+    })
+    .attr("dy", ".35em")
+    .text(function(d) { return d.name; })
+    .attr("text-anchor", function(d){
+    	var $this = $(this);
+    	var r = $this.siblings("circle")[0].r.baseVal.value;
+    	if(d.name.length < r / 3)
+    		return "middle";
+    	return "left";
+    	});
+}*/
 
 function start(){
 	//var linkMap = new Object();
@@ -160,25 +278,9 @@ function start(){
 
 	var node = vis.selectAll("g.node")
     .data(nodes)
-    .enter().append("svg:g")
+    .enter()
+    .append("svg:g")
      .attr("class", "node")
-     .on("mouseover", function(d, i){
-	         link.data(linkArray[i])
-	         .enter().insert("svg:line", "g.node")
-	         .attr("class", "link")
-	         .style("stroke-width", function(d) { return d.count;})//return Math.sqrt(d.value); })
-	         .style("stroke", function(d){ return "black"; })
-	         .style("opacity", 0)//return fill(d.id);
-		      .transition().style("opacity", function(d){ return 0.9*(d.count/recipeMax[i]);})
-		      .attr("x1", function(d) { return d.source.x; })
-		      .attr("y1", function(d) { return d.source.y; })
-		      .attr("x2", function(d) { return d.target.x; })
-		      .attr("y2", function(d) { return d.target.y; });
-      })
-      .on("mouseout",function(d,i){
-    	  
-    	  vis.selectAll("line.link").transition().style("opacity", 0).remove();
-      })
       .call(force.drag);
 	
 	
@@ -186,7 +288,11 @@ function start(){
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d){return 2+d.recipenum/2;})
-      .style("fill", "#9fc054");
+      .style("fill", function(d){
+    	  if(d.children.length>0)
+    	  	return "#87A347";
+    	  return "#9fc054";})
+    .on("click", click);
 	
 	node.append("svg:title")
 	.text(function(d) { return d.name; });
@@ -225,5 +331,24 @@ function start(){
 		  .attr("cy", function(d) { return d.y; });
 		});*/
 	
-	force.start();
+	vis.selectAll("g.node")
+	.on("mouseover", function(d, i){
+		vis.selectAll("line.link").data(linkArray[i])
+	         .enter().insert("svg:line", "g.node")
+	         .attr("class", "link")
+	         .style("stroke-width", function(d) { return d.count;})//return Math.sqrt(d.value); })
+	         .style("stroke", function(d){ return "black"; })
+	         .style("opacity", 0)//return fill(d.id);
+		      .transition().style("opacity", function(d){ return 0.9*(d.count/recipeMax[i]);})
+		      .attr("x1", function(d) { return d.source.x; })
+		      .attr("y1", function(d) { return d.source.y; })
+		      .attr("x2", function(d) { return d.target.x; })
+		      .attr("y2", function(d) { return d.target.y; });
+      })
+      .on("mouseout",function(d,i){
+    	  
+    	  vis.selectAll("line.link").transition().style("opacity", 0).remove();
+      });
+	
+	force.links(links).start();
 }
