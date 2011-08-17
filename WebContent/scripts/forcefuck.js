@@ -22,10 +22,10 @@ var vis = d3.select("#content")
 
 var force = d3.layout.force()
 .charge(-120)
-.linkDistance(500)
+.linkDistance(400)
 .nodes(nodes)
 .links(links)
-.linkStrength(0.1)
+.linkStrength(0)
 .size([w, h])
 .start();
 
@@ -333,6 +333,7 @@ function start(){
 	
 	vis.selectAll("g.node")
 	.on("mouseover", function(d, i){
+		console.log("mouseover:"+d.index);
 		vis.selectAll("line.link").data(linkArray[i])
 	         .enter().insert("svg:line", "g.node")
 	         .attr("class", "link")
@@ -346,7 +347,7 @@ function start(){
 		      .attr("y2", function(d) { return d.target.y; });
       })
       .on("mouseout",function(d,i){
-    	  
+    	  console.log("mouseout"+d.index);
     	  vis.selectAll("line.link").transition().style("opacity", 0).remove();
       });
 	
