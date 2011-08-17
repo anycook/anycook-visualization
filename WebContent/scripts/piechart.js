@@ -8,7 +8,7 @@ $.ajaxSetup({
 var w = 400,
     h = 400,
     r = Math.min(w, h) / 2,
-    color = d3.scale.category20c(),
+    color = [d3.scale.category20(), d3.scale.category20b(), d3.scale.category20c()],
     ingredients = [],
     names = [],
     total = 0,
