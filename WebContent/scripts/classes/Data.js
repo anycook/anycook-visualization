@@ -167,3 +167,12 @@ Data.prototype.makeLinks = function(){
 	
 	console.log("finished making links");
 };
+
+Data.prototype.showChildrenOf = function(parentnode){
+	var thisObj = this;
+	$(thisObj.children).each(function(i, value){
+		if(value.parentname = parentnode)
+			thisObj.nodestodraw.push(value);
+	});
+	thisObj.makeLinks();
+};

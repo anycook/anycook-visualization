@@ -36,7 +36,7 @@ force.on("tick", function() {
 var data = new Data();
 data.init(start, function(percent){
 	var value = Math.round(percent * 100);
-	$("#percentage").text(value);
+	$("#percentage").text(value+"%");
 });
 
 function start(){
@@ -63,7 +63,10 @@ function start(){
 	    .style("fill", function(d){
 	    	if(d.children.length>0)
 	    		return "#87A347";
-	    	return "#9fc054";});
+	    	return "#9fc054";})
+	    .on("click", function(d, i){
+	    	data.showChildrenOf(d.name);
+	    });
 	
 	node.append("svg:title")
 		.text(function(d) { return d.name; });
