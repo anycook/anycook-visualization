@@ -1,3 +1,17 @@
+#pie{
+	width : 400px;
+	float : left;
+}
+
+#content{
+	float:left;
+}
+
+.nodetext{
+	pointer-events: auto !important;
+	cursor: pointer !important;
+}
+
 .node circle {
   stroke: #fff;
   stroke-width: 1.5px;
