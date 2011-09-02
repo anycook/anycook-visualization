@@ -30,14 +30,20 @@ function startForce(){
 	
 	force.on("tick", function() {
 		var w = $("#force").width();
+		var h = $("#force").height();
 		vis.selectAll("g.node").attr("transform", function(d) {
 			var x = d.x;
-			if(x<d.r) x = d.r;
-			else if(x>w-d.r) x = w-d.r;
+			var r = getRadius(d.recipenum);
+			if(x<r) 
+				x = r;
+			else if(x>w-r) 
+				x = w-r;
 			
 			var y = d.y;
-			if(y<d.r) y = d.r;
-			else if(y>w-d.r) y = w-d.r;
+			if(y<r) 
+				y = r;
+			else if(y>h-r) 
+				y = h-r;
 			
 			d.x = x;
 			d.y = y;
@@ -72,8 +78,8 @@ function restartForce(){
 	.attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("r", function(d){
-    	return 2+d.recipenum/2
-    ;})
+    	return getRadius(d.recipenum);
+    })
     .style("fill", function(d){
     	if(d.childrennum>0)
     		return "#87A347";
@@ -148,4 +154,8 @@ function restartForce(){
 	
 	  force.start();
 		
+}
+
+function getRadius(recipenum){
+	return 2+recipenum/2;
 }
