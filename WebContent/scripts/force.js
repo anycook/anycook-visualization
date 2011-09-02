@@ -3,7 +3,7 @@ var vis,
 
 function startForce(){
 	var w = $("#force").width(),
-    h = $(document).height()-100;
+    h = $("#force").height();
 	
 	var nodes = getData("nodes");
 	var links = getData("links");
@@ -91,7 +91,9 @@ function restartForce(){
     });
 	
 	node.on("mouseover", function(d, i){
-		vis.selectAll("line.link").data(linkMap[i])
+		var links = linkMap[i];
+		
+		vis.selectAll("line.link").data(links)
 		.enter().insert("svg:line", "g.node")
 		.attr("class", "link")
 		.style("stroke-width", function(d) { return d.count;})
