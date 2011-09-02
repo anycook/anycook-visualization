@@ -20,6 +20,15 @@ function makeIngredientMap(ingredient){
 	}
 }
 
+function makeNodes(){
+	var nodes = [];
+	var ingredientMap = getData("ingredientMap");
+	for(var key in ingredientMap){
+		nodes.push(ingredientMap[key]);
+	}
+	setData({nodes:nodes});
+}
+
 function makeLinks(){
 	var recipeID = 0;
 	

@@ -20,11 +20,13 @@ function getData(fieldname){
 		return $("body").data("data")[fieldname];
 }
 
-function setData(options){
+function setData(optionskey, value){
 	var data = getData();
-	for(var option in options){
-		data[option] = options[option];
-	}
+	
+	if(typeof optionskey == "object")
+		jQuery.extend(data, optionskey);
+	else if(typeof optionskey == "string" && value != undefined)
+		data[optionskey] == value;
 	$("body").data("data", data);
 }
 
