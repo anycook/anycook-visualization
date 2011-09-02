@@ -23,10 +23,11 @@ function getData(fieldname){
 function setData(optionskey, value){
 	var data = getData();
 	
-	if(typeof optionskey == "object")
-		jQuery.extend(data, optionskey);
-	else if(typeof optionskey == "string" && value != undefined)
-		data[optionskey] == value;
+	
+	if(typeof optionskey == "string" && value != undefined)
+		data[optionskey] = value;
+	else if(typeof optionskey == "object")
+		jQuery.extend(data, optionskey);	 
 	$("body").data("data", data);
 }
 

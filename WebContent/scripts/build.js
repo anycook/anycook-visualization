@@ -7,7 +7,7 @@ function makeIngredientMap(ingredient){
 		for(var i in ingredients){
 			jQuery.extend(ingredientMap, makeIngredientMap(ingredients[i]));
 		}
-		setData({ingredientMap:ingredientMap});
+		setData("ingredientMap", ingredientMap);
 		
 	}else{
 		var ingredientMap = {};
@@ -26,7 +26,7 @@ function makeNodes(){
 	for(var key in ingredientMap){
 		nodes.push(ingredientMap[key]);
 	}
-	setData({nodes:nodes});
+	setData("nodes",nodes);
 }
 
 function makeLinks(){

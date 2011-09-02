@@ -10,6 +10,7 @@ $(document).ready(function(){
 		
 		$("#progressbar").remove();
 		makeIngredientMap();
+		makeNodes();
 		console.log("ingredientMap:", getData("ingredientMap"));
 	});
 
