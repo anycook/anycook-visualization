@@ -2,6 +2,7 @@ function makePieData(name){
 	var ingredients = [],
 	names = [];
 	
+	
 	if(name == undefined){
 		var ingrdata = getData("ingredients");
 		for(var i in ingrdata){
@@ -73,7 +74,11 @@ function makePieData(name){
 
 
 
-function drawPie(name, num){	
+function drawPie(name, num){
+	
+	var colors = new DataColor();
+	colors.init();
+	
 	d3.select('#pie').selectAll('svg').remove();
 	
 	var piedata = makePieData(name, num);
@@ -107,8 +112,9 @@ function drawPie(name, num){
 		.attr("transform", "translate(" + rad + "," + rad + ")");
 	
 	arcs.append("svg:path")
-		.attr("fill", function(d, i) { 
-			return color(names[i]); 
+		.attr("fill", function(d, i) {
+			return colors.getNextColor();
+			//return color(names[i]); 
 			})
 		.attr("stroke", "white")
 		.attr("stroke-width", function(d, i){
@@ -121,13 +127,8 @@ function drawPie(name, num){
 		})
 		.attr("d", arc)
 		.on("mouseover", function(d, i){
-			var currentdata = null;
-			for(var j in data.nodes){
-				if(data.nodes[j].name == names[i]){
-					currentdata = data.nodes[j];
-					break;
-					}
-				}
+			var ingredientMap = getData("ingredientMap");
+			var currentdata = ingredientMap[names[i]];
 			var infotext = "<p>"+currentdata.name+"</p><table>";
 			if(currentdata.parentname != undefined)
 						infotext += "<tr><td>Überzutat</td><td>"+currentdata.parentname+"</td></tr>";
