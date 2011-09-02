@@ -32,17 +32,20 @@ function makeNodes(){
 function makeRecipeMap(){
 	var recipeMap = {};
 	var nodestodraw = getData("nodestodraw");
-	for(var i in nodestodraw){
-		var recipes = nodestodraw[i].recipes;
-		for(var j in recipes){
-			var recipename = recipes[j];
-			var ingredientarray = [];
-			
-			if(recipeMap[recipename] != undefined)
-				ingredientarray = recipeMap[recipename];
-			
-			ingredientarray.push(nodestodraw[i].index);
-			recipeMap[recipename] = ingredientarray;
+	var nodes = getData("nodes");
+	for(var i in nodes){
+		if($.inArray(nodes[i], nodestodraw) != -1){
+			var recipes = nodes[i].recipes;
+			for(var j in recipes){
+				var recipename = recipes[j];
+				var ingredientarray = [];
+				
+				if(recipeMap[recipename] != undefined)
+					ingredientarray = recipeMap[recipename];
+				
+				ingredientarray.push(Number(i));
+				recipeMap[recipename] = ingredientarray;
+			}
 		}
 	}
 	
@@ -58,17 +61,15 @@ function makeLinks(){
 	
 	for(var recipe in recipeMap){
 		var recipearray = recipeMap[recipe];
-		for(var i = 0; i<recipearray.length-2; i++){
+		for(var i = 0; i<recipearray.length-1; i++){
 				var index1 = recipearray[i];
 			for(var j = i+1; j<recipearray.length; j++){
 				var found = false;
 				var index2 = recipearray[j];
 				
 				for(var k in links){						
-					if(links[k].source == index1
-						&& links[k].target == index2
-						|| links[k].target == index1 
-						&& links[k].source == index2){
+					if(links[k].source == index1&& links[k].target == index2
+							|| links[k].target == index1 && links[k].source == index2){
 							var link = links[k];
 							link.count++;
 							link.names.push(recipe);
@@ -84,19 +85,19 @@ function makeLinks(){
 		}
 		recipeID++;
 		
-		for(var i in links){
+		for(var i = 0; i<links.length; i++){
 			var sourceindex = links[i].source;
-			if(linkMap[sourceindex] == null || linkMap[sourceindex] == undefined)
+			if(linkMap[sourceindex] == undefined)
 				linkMap[sourceindex] = [];
 			
 			if($.inArray(links[i], linkMap[sourceindex])==-1)
 				linkMap[sourceindex].push(links[i]);
 			
 			var targetindex = links[i].target;
-			if(linkMap[targetindex] == null || linkMap[targetindex] == undefined)
+			if( linkMap[targetindex] == undefined)
 				linkMap[targetindex] = [];
 			
-			if($.inArray(links[i], linkMap[sourceindex])==-1)
+			if($.inArray(links[i], linkMap[targetindex])==-1)
 				linkMap[targetindex].push(links[i]);		
 		}
 		
@@ -109,6 +110,4 @@ function makeLinks(){
 		}
 	}
 	setData({links:links, linkMap:linkMap, recipeMax:recipeMax});
-	
-	console.log("finished making links");
 };

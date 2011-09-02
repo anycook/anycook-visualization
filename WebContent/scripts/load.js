@@ -51,8 +51,7 @@ function addIngredient(name, depth){
 				depth: depth, 
 				recipes: json.recipes, 
 				childrennum:json.children.length, 
-				recipenum:json.recipenum,
-				index:index++};
+				recipenum:json.recipenum};
 		
 		if(json.children.length == 0)
 			dfd.resolve(ingredient);
