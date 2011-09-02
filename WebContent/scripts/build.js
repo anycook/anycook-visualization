@@ -31,18 +31,21 @@ function makeNodes(){
 
 function makeRecipeMap(){
 	var recipeMap = {};
+	var nodes =  getData("nodes");
 	var nodestodraw = getData("nodestodraw");
-	for(var i in nodestodraw){
-		var recipes = nodestodraw[i].recipes;
-		for(var j in recipes){
-			var recipename = recipes[j];
-			var ingredientarray = [];
-			
-			if(recipeMap[recipename] != undefined)
-				ingredientarray = recipeMap[recipename];
-			
-			ingredientarray.push(nodestodraw[i].index);
-			recipeMap[recipename] = ingredientarray;
+	for(var i in nodes){
+		if($.inArray(nodes[i], nodestodraw) != -1){
+			var recipes = nodes[i].recipes;
+			for(var j in recipes){
+				var recipename = recipes[j];
+				var ingredientarray = [];
+				
+				if(recipeMap[recipename] != undefined)
+					ingredientarray = recipeMap[recipename];
+				
+				ingredientarray.push(nodes[i].index);
+				recipeMap[recipename] = ingredientarray;
+			}
 		}
 	}
 	
