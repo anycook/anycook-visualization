@@ -12,6 +12,7 @@ $(document).ready(function(){
 		makeIngredientMap();
 		makeNodes();
 		console.log("ingredientMap:", getData("ingredientMap"));
+		drawPie(undefined);
 	});
 
 });
