@@ -5,12 +5,11 @@ function getData(fieldname){
 			nodestodraw : [],
 			links : [],
 			total : 0,
-			recipemap : {},
+			recipeMap : {},
 			linkmap : {},
 			recipemax : [],
 			ingredients : [],
-			ingredientMap:{},
-			index:index++
+			ingredientMap:{}
 		});
 	}
 	

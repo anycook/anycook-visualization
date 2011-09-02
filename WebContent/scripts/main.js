@@ -6,13 +6,14 @@ $(document).ready(function(){
 	
 	
 	$.when(loadData()).done(function(){
-		//data has been loaded init graphs HERE
+		//data has been loaded. init graphs HERE
 		
 		$("#progressbar").remove();
 		makeIngredientMap();
 		makeNodes();
-		console.log("ingredientMap:", getData("ingredientMap"));
-		drawPie(undefined);
+		makeRecipeMap();
+		console.log("recipeMap:", getData("recipeMap"));
+		drawPie();
 	});
 
 });

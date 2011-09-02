@@ -29,6 +29,26 @@ function makeNodes(){
 	setData("nodes",nodes);
 }
 
+function makeRecipeMap(){
+	var recipeMap = {};
+	var nodestodraw = getData("nodestodraw");
+	for(var i in nodestodraw){
+		var recipes = nodestodraw[i].recipes;
+		for(var j in recipes){
+			var recipename = recipes[j];
+			var ingredientarray = [];
+			
+			if(recipeMap[recipename] != undefined)
+				ingredientarray = recipeMap[recipename];
+			
+			ingredientarray.push(nodestodraw[i].index);
+			recipeMap[recipename] = ingredientarray;
+		}
+	}
+	
+	setData("recipeMap", recipeMap);
+}
+
 function makeLinks(){
 	var recipeID = 0;
 	
