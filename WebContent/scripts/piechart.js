@@ -53,7 +53,7 @@ function makePieData(name){
 	var swaps = -1;
 	while(swaps !=0){
 		swaps = 0;
-		for(i in ingredients){
+		for(var i in ingredients){
 			i = parseInt(i);
 			j = i + 1;
 			var tmp;
@@ -89,7 +89,6 @@ function drawPie(name, num){
 	var width = 250,
 	height = 250,
 	rad = 100,
-	color = d3.scale.category20c(),
 	donut = d3.layout.pie(),
 	arc = d3.svg.arc().innerRadius(0).outerRadius(rad),
 	center = [width/2,height/2];
@@ -113,8 +112,9 @@ function drawPie(name, num){
 	
 	arcs.append("svg:path")
 		.attr("fill", function(d, i) {
+			if(names[i]==name)
+				return colors.getNextHighlightColor();
 			return colors.getNextColor();
-			//return color(names[i]); 
 			})
 		.attr("stroke", "white")
 		.attr("stroke-width", function(d, i){
