@@ -1,7 +1,7 @@
 function getData(fieldname){
 	if(!$("body").data("data")){
 		$("body").data("data", {		
-			nodes: new Array(),
+			nodes: [],
 			nodestodraw : [],
 			links : [],
 			total : 0,
@@ -9,20 +9,21 @@ function getData(fieldname){
 			linkmap : {},
 			recipemax : [],
 			ingredients : [],
+			ingredientMap:{},
 			index:index++
 		});
 	}
 	
-	if(fieldname === undefined)	
+	if(fieldname == undefined)	
 		return $("body").data("data");
 	else
-		return $("body").data("data", fieldname);
+		return $("body").data("data")[fieldname];
 }
 
 function setData(options){
 	var data = getData();
 	for(var option in options){
-		data[option] = options;
+		data[option] = options[option];
 	}
 	$("body").data("data", data);
 }
@@ -69,7 +70,7 @@ function addIngredient(name, depth){
 	
 }
 
-function makeNodes(){
+/*function makeNodes(){
 	var dfd = $.Deferred();
 	var ingredients = [];
 	var depth = 0;
@@ -89,7 +90,7 @@ function makeNodes(){
 		
 	});
 	return dfd.promise();
-};
+};*/
 
 function loadData(){
 	var dfd = $.Deferred();

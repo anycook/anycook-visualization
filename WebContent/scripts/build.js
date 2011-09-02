@@ -1,11 +1,22 @@
-function makeNodes(){
-	var nodes = [];
-	var nodestodraw = getData("nodestodraw");
-	for(var i in nodestodraw){
-		var node = nodestodraw[i];
-		node.index = nodes.length;
-		node.depth = 0;
-		nodes.push(node);
+function makeIngredientMap(ingredient){
+	
+	if(ingredient == undefined){
+		var ingredients = getData("ingredients");
+		
+		var ingredientMap = {};
+		for(var i in ingredients){
+			jQuery.extend(ingredientMap, makeIngredientMap(ingredients[i]));
+		}
+		setData({ingredientMap:ingredientMap});
+		
+	}else{
+		var ingredientMap = {};
+		ingredientMap[ingredient.name] = ingredient;
+		for(var i in ingredient.children){
+			jQuery.extend(ingredientMap, makeIngredientMap(ingredient.children[i]));
+		}
+		
+		return ingredientMap;
 	}
 }
 

@@ -5,13 +5,12 @@ $(document).ready(function(){
 	});
 	
 	
-	
-	var w = $(document).width()/2,
-    h = $(document).height(),
-    fill = d3.scale.category20();
-	
 	$.when(loadData()).done(function(){
+		//data has been loaded init graphs HERE
+		
 		$("#progressbar").remove();
+		makeIngredientMap();
+		console.log("ingredientMap:", getData("ingredientMap"));
 	});
 
 });
