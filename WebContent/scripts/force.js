@@ -23,8 +23,8 @@ function startForce(){
     .links(links)
 	//.charge(-400)
 	.linkDistance(500)
-	.linkStrength(0)
-	//.gravity(0.5)
+	.linkStrength(function(link){return Math.log(link.count)/10;})
+	.gravity(0.2)
 	//.theta(0.01)	
     .size([w, h]);
 	
@@ -52,7 +52,8 @@ function restartForce(){
 	.data(nodestodraw)
 	.enter()
 	.append("svg:g")
-	.attr("class", "node");
+	.attr("class", "node")
+	.call(force.drag);
 	
 	node.append("svg:circle")
 	.attr("cx", function(d) { return d.x; })
@@ -66,8 +67,7 @@ function restartForce(){
     	return "#9fc054";})
     .on("click", function(d, i){
     	//data.showChildrenOf(d.name);
-    })    
-	.call(force.drag);
+    });
 
 	node.append("svg:text")
 	    .attr("class", "nodetext")
