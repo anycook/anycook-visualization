@@ -19,6 +19,20 @@
 .node circle {
   stroke: #fff;
   stroke-width: 1.5px;
+  fill: #87A347;
+}
+
+.node.active circle{
+	fill:#cd1f00;
+}
+
+.node text{
+	fill:#505050;
+	/*text-shadow:1px 1px 0px #CCCCCC;*/
+}
+
+.node.active text{
+	fill: #BBBBBB;
 }
 
 line.link {
@@ -31,3 +45,5 @@ line.link {
 .arc text{
 	font: 10px sans-serif;
 }
+
+

@@ -22,11 +22,13 @@ function makeIngredientMap(ingredient){
 
 function makeNodes(){
 	var nodes = [];
+	var ingredientNames = [];
 	var ingredientMap = getData("ingredientMap");
 	for(var key in ingredientMap){
 		nodes.push(ingredientMap[key]);
+		ingredientNames.push(key);
 	}
-	setData("nodes",nodes);
+	setData({nodes:nodes, ingredientNames:ingredientNames});
 }
 
 function makeRecipeMap(){

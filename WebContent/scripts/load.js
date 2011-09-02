@@ -9,7 +9,8 @@ function getData(fieldname){
 			linkMap : {},
 			recipeMax : [],
 			ingredients : [],
-			ingredientMap:{}
+			ingredientMap:{},
+			ingredientNames:[]
 		});
 	}
 	

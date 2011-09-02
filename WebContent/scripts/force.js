@@ -61,6 +61,7 @@ function startForce(){
 }
 
 function restartForce(){
+	if(force==undefined) return;
 	//var vis = d3.select("#force svg:svg");
 	var nodestodraw = getData("nodestodraw");
 	var linkMap = getData("linkMap");
@@ -80,10 +81,10 @@ function restartForce(){
     .attr("r", function(d){
     	return getRadius(d.recipenum);
     })
-    .style("fill", function(d){
+    /*.style("fill", function(d){
     	if(d.childrennum>0)
     		return "#87A347";
-    	return "#9fc054";})
+    	return "#9fc054";})*/
     .on("click", function(d, i){
     	//data.showChildrenOf(d.name);
     });
@@ -108,7 +109,17 @@ function restartForce(){
     	return "left";
     })
     .on("click", function(d){
-    	drawPie(d.name, d.recipenum);
+    	if(d3.select(this.parentNode).classed("active")){
+    		d3.select(".active").classed("active", false);    		
+    		drawPie(d.parentName);
+    	}
+    	else{
+    		d3.select(".active").classed("active", false); 
+    		d3.select(this.parentNode).classed("active", true);
+    		drawPie(d.name);
+    	}
+    		
+    	restartForce();
     });
 	
 	vis.selectAll("g.node").on("mouseover", function(ingredient, i){

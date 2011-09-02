@@ -8,9 +8,8 @@ $(document).ready(function(){
 	$(window).resize(resizeContent);
 	
 	var forcew = $("#force").width(),
-    forceh = $(document).height()-105;
+    forceh = $("#force").height();
 	
-	$("#force").css("height", forceh);
 	var progressw = $("#progressbar").width(),
 	progressh = $("#progressbar").height();
 	$("#progressbar").css({marginLeft: forcew/2-progressw/2, marginTop: forceh/2-progressh/2});
@@ -25,6 +24,7 @@ $(document).ready(function(){
 		makeNodes();
 		makeRecipeMap();
 		makeLinks();
+		initSearchBar();
 		drawPie();
 		startForce();
 		//resizeContent();
@@ -36,5 +36,18 @@ $(document).ready(function(){
 });
 
 function resizeContent(){
-	$("#force").width((($("#content").innerWidth()-$("aside").outerWidth(true)))-1);
+	$("#force").width((($("#content").innerWidth()-$("aside").outerWidth(true)))-1)
+		.height($(document).height()-85);
+	
+	$("#force>svg").width($("#force").width()).height($("#force").height());
+	
+	restartForce();
+	
+}
+
+function initSearchBar(){
+	var ingredientNames = getData("ingredientNames");
+	$("#searchbar").autocomplete({
+		source:ingredientNames
+	});
 }
