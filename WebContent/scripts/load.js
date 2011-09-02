@@ -6,8 +6,8 @@ function getData(fieldname){
 			links : [],
 			total : 0,
 			recipeMap : {},
-			linkmap : {},
-			recipemax : [],
+			linkMap : {},
+			recipeMax : [],
 			ingredients : [],
 			ingredientMap:{}
 		});
@@ -50,8 +50,9 @@ function addIngredient(name, depth){
 				children:[], 
 				depth: depth, 
 				recipes: json.recipes, 
-				numchildren:json.children.length, 
-				recipenum:json.recipenum};
+				childrennum:json.children.length, 
+				recipenum:json.recipenum,
+				index:index++};
 		
 		if(json.children.length == 0)
 			dfd.resolve(ingredient);
@@ -71,28 +72,6 @@ function addIngredient(name, depth){
 	return dfd.promise();
 	
 }
-
-/*function makeNodes(){
-	var dfd = $.Deferred();
-	var ingredients = [];
-	var depth = 0;
-	$.when(getIngredients()).done(function(parents){
-		$("progress").attr("max", parents.total);
-		for(var i in parents.ingredients)
-			$.when(addIngredient(parents.ingredients[i]), depth).done(function(ingredient){
-				ingredients.push(ingredient);
-				$("progress").val(Number($("progress").val())+1);
-				$("#percentage").text(Math.round((Number($("progress").val())/Number(parents.total))*100));
-				if(ingredients.length == parents.total){
-					dfd.resolve(ingredients);
-				}
-			});
-		
-		
-		
-	});
-	return dfd.promise();
-};*/
 
 function loadData(){
 	var dfd = $.Deferred();

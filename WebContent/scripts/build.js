@@ -51,75 +51,64 @@ function makeRecipeMap(){
 
 function makeLinks(){
 	var recipeID = 0;
+	var recipeMap = getData("recipeMap");
+	var links = [];
+	var linkMap = {};
+	var recipeMax = {};
 	
-	for(var recipe in this.recipemap){
-		var recipearray = this.recipemap[recipe];
+	for(var recipe in recipeMap){
+		var recipearray = recipeMap[recipe];
 		for(var i = 0; i<recipearray.length-2; i++){
 				var index1 = recipearray[i];
-				if($.inArray(this.nodes[index1],this.nodestodraw) == -1)
-					continue;
 			for(var j = i+1; j<recipearray.length; j++){
 				var found = false;
 				var index2 = recipearray[j];
-				if($.inArray(this.nodes[index2],this.nodestodraw) == -1)
-					continue;
 				
-				for(var k in this.links){						
-					if(this.links[k].source == index1
-						&& this.links[k].target == index2
-						|| this.links[k].target == index1 
-						&& this.links[k].source == index2){
-							var link = this.links[k];
+				for(var k in links){						
+					if(links[k].source == index1
+						&& links[k].target == index2
+						|| links[k].target == index1 
+						&& links[k].source == index2){
+							var link = links[k];
 							link.count++;
 							link.names.push(recipe);
-							this.links[k] = link;
+							links[k] = link;
 							found=true;
 							break;
 					}
 				}
 				if(!found){
-					this.links.push({"source":recipearray[i], "target":recipearray[j], "id" : recipeID, "names" : [recipe], "count":1});
+					links.push({"source":recipearray[i], "target":recipearray[j], "id" : recipeID, "names" : [recipe], "count":1});
 				}
 			}
 		}
 		recipeID++;
 		
-		for(var i in this.links){
-			var sourceindex = this.links[i].source;
-			if(this.linkmap[sourceindex] == null || this.linkmap[sourceindex] == undefined)
-				this.linkmap[sourceindex] = new Array();
+		for(var i in links){
+			var sourceindex = links[i].source;
+			if(linkMap[sourceindex] == null || linkMap[sourceindex] == undefined)
+				linkMap[sourceindex] = [];
 			
-			if($.inArray(this.links[i], this.linkmap[sourceindex])==-1)
-				this.linkmap[sourceindex].push(this.links[i]);
+			if($.inArray(links[i], linkMap[sourceindex])==-1)
+				linkMap[sourceindex].push(links[i]);
 			
-			var targetindex = this.links[i].target;
-			if(this.linkmap[targetindex] == null || this.linkmap[targetindex] == undefined)
-				this.linkmap[targetindex] = new Array();
+			var targetindex = links[i].target;
+			if(linkMap[targetindex] == null || linkMap[targetindex] == undefined)
+				linkMap[targetindex] = [];
 			
-			if($.inArray(this.links[i], this.linkmap[sourceindex])==-1)
-				this.linkmap[targetindex].push(this.links[i]);		
+			if($.inArray(links[i], linkMap[sourceindex])==-1)
+				linkMap[targetindex].push(links[i]);		
 		}
 		
 		
-		for(var i in this.linkmap){
-			this.recipemax[i] = 0;
-			for(var j in this.linkmap[i]){
-				this.recipemax[i] = Math.max(this.recipemax[i], this.linkmap[i][j].count);
+		for(var i in linkMap){
+			recipeMax[i] = 0;
+			for(var j in linkMap[i]){
+				recipeMax[i] = Math.max(recipeMax[i], linkMap[i][j].count);
 			}
 		}
 	}
+	setData({links:links, linkMap:linkMap, recipeMax:recipeMax});
 	
 	console.log("finished making links");
 };
-
-function buildrecipemap(){
-	var ingredients = getData("ingredients");
-	var recipemap = [];
-	for(var i in ingredients){
-		
-	}
-}
-
-function addtorecipemap(recipemap, ingredient){
-	
-}
