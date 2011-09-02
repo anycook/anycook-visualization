@@ -7,22 +7,16 @@ function DataColor(){
 
 DataColor.prototype.init = function(){
 	var i;
-	for(i=182; i<256; i += 29.2 ){
-		for(var j = i-30; j>80 ; j -= 40){
-			var color = "#"+ d2h(j) +d2h(i) + d2h(80);
+	for(i=205; i<256; i += 29.2 ){
+		for(var j = 175; j>29 ; j -= 30){
+			var color = "#"+ d2h(j) +d2h(i) + d2h(29);
 			this.colors.push(color);
-			color = "#"+ d2h(i) +d2h(j) + d2h(80);
+			color = "#"+ d2h(i) +d2h(j) + d2h(29);
 			this.colors.push(color);
-			color = "#"+ d2h(i) +d2h(80) + d2h(j);
+			color = "#"+ d2h(i) +d2h(29) + d2h(j);
 			this.colors.push(color);
 		}
-		
-		
-		
 	}
-	
-	
-	
 	
 	/*i -= 14.6;
 	var r = i * 0.81,
