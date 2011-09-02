@@ -1,6 +1,7 @@
 function makePieData(name){
 	var ingredients = [],
-	names = [];
+	names = [],
+	parent = undefined;
 	
 	
 	if(name == undefined){
@@ -29,6 +30,7 @@ function makePieData(name){
 	else{
 		var ingredientMap = getData("ingredientMap");
 		var value = ingredientMap[name];
+		parent = value.parentname;
 		
 		names.push(name);
 		ingredients.push(value.recipenum);
@@ -69,26 +71,26 @@ function makePieData(name){
 		}
 	}
 	
-	return {"names":names, "ingredients": ingredients};
+	return {"names":names, "ingredients": ingredients, "parentname": parent};
 }
 
 
 
-function drawPie(name, num){
+function drawPie(name){
 	
 	var colors = new DataColor();
 	colors.init();
 	
 	d3.select('#pie').selectAll('svg').remove();
 	
-	var piedata = makePieData(name, num);
+	var piedata = makePieData(name);
 	
 	ingredients = piedata.ingredients;
 	names = piedata.names;
 	
 	var width = 250,
 	height = 250,
-	rad = 100,
+	rad = 125,
 	donut = d3.layout.pie(),
 	arc = d3.svg.arc().innerRadius(0).outerRadius(rad),
 	center = [width/2,height/2];
@@ -141,7 +143,10 @@ function drawPie(name, num){
 			$("#pieselection").text("");
 		})
 		.on("click", function(d,i){
-			drawPie(names[i], ingredients[i]);
+			if(i==0 && name != undefined)
+				drawPie(piedata.parentname);
+			else
+				drawPie(names[i], ingredients[i]);
 		});
 	
 	arcs.append("svg:title")
