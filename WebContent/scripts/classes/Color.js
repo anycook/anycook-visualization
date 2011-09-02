@@ -8,7 +8,7 @@ function DataColor(){
 DataColor.prototype.init = function(){
 	var i;
 	for(i=205; i<256; i += 29.2 ){
-		for(var j = 175; j>29 ; j -= 30){
+		for(var j = 175; j>29 ; j -= 35){
 			var color = "#"+ d2h(j) +d2h(i) + d2h(29);
 			this.colors.push(color);
 			color = "#"+ d2h(i) +d2h(j) + d2h(29);
