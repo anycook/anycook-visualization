@@ -29,14 +29,27 @@ function startForce(){
     .size([w, h]);
 	
 	force.on("tick", function() {
+		var w = $("#force").width();
+		vis.selectAll("g.node").attr("transform", function(d) {
+			var x = d.x;
+			if(x<d.r) x = d.r;
+			else if(x>w-d.r) x = w-d.r;
+			
+			var y = d.y;
+			if(y<d.r) y = d.r;
+			else if(y>w-d.r) y = w-d.r;
+			
+			d.x = x;
+			d.y = y;
+			return "translate(" + x+ "," + y + ")"; });
+		
 		vis.selectAll("line.link")
-			.attr("x1", function(d) { return d.source.x; })
+			.attr("x1", function(d) {return d.source.x; })
 			.attr("y1", function(d) { return d.source.y; })
 			.attr("x2", function(d) { return d.target.x; })
 			.attr("y2", function(d) { return d.target.y; });
 		
-		vis.selectAll("g.node").attr("transform", function(d) { 
-			return "translate(" + d.x + "," + d.y + ")"; });
+		
 	});
 	restartForce();
 }
