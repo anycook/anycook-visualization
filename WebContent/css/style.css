@@ -1,1 +1,155 @@
-body,div,ul,ol,li,h1,h2,h3,h4,p,th,td,form{margin:0;padding:0;font:10pt "Lucida Sans Unicode","Lucida Grande",sans-serif;overflow:hidden;}.ui-autocomplete{max-height:200px;width:212px;float:left;background-color:#DDDDDD;overflow-y:auto;overflow-x:hidden;padding-right:20px;}h3{font:13pt Georgia,serif;margin-bottom:10px;}header{background:#95b64f;width:100%;height:80px;}header hgroup{float:left;margin:20px 0 0 50px;}header hgroup h1{float:left;}header hgroup h2{float:left;font:13pt Georgia,serif;margin:20px 0 0 10px;font-size:14pt;}header #searchbar{float:right;font:13pt Georgia,serif;size:50;margin:40px 110px 0 0;}#content{width:100%;float:left;}#content #force{float:left;border-right:1px solid #505050;}#content #force #progressbar{float:left;}#content #force .nodetext{pointer-events:auto !important;cursor:pointer !important;font:10px "Lucida Sans Unicode","Lucida Grande",sans-serif;}#content #force .node{cursor:pointer;}#content #force .node:hover circle{fill:#acd058;}#content #force .node.active circle{fill:#cd1f00;}#content #force .node.active text{fill:#BBBBBB;}#content #force .node circle{stroke:#fff;stroke-width:1.5px;fill:#87A347;}#content #force .node text{fill:#505050;}#content #force line .link{stroke:#999;stroke-opacity:1;}#content aside{float:right;width:400px;}#content aside #piesection{margin-top:20px;height:400px;width:355px;padding-left:45px;border-bottom:1px solid #505050;}#content aside #piesection #pie{width:100%;height:250px;}#content aside #piesection #pie .arc{cursor:pointer;border:3px;box-shadow:3px 3px 4px #000;-moz-box-shadow:3px 3px 4px #000;-webkit-box-shadow:3px 3px 4px #000;-o-box-shadow:3px 3px 4px #000;opacity:.9;transition:opacity 0.1s ease-out;-webkit-transition:opacity 0.1s ease-out;-moz-transition:opacity 0.1s ease-out;-o-transition:opacity 0.1s ease-out;}#content aside #piesection #pie .arc:hover{opacity:.7;transition:opacity 0.1s ease-in;-webkit-transition:opacity 0.1s ease-in;-moz-transition:opacity 0.1s ease-in;-o-transition:opacity 0.1s ease-in;}#content aside #piesection #pie .arc text{font:10px sans-serif;}#content aside #piesection #pieselection{width:100%;height:100px;font:10px sans-serif;}#content aside #barsection{width:100%;}#content aside #barsection h3{margin:10px 0 0 10px;}#content aside #barsection #bar text{font:10px "Lucida Sans Unicode","Lucida Grande",sans-serif;color:#505050;}#content aside #barsection progress{display:none;}
+body,
+div,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+p,
+th,
+td,
+form {
+  margin: 0;
+  padding: 0;
+  font: 10pt "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  overflow: hidden;
+}
+.ui-autocomplete {
+  max-height: 200px;
+  width: 212px;
+  float: left;
+  background-color: #DDDDDD;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+
+  overflow-x: hidden;
+  /* add padding to account for vertical scrollbar */
+
+  padding-right: 20px;
+}
+h3 {
+  font: 13pt Georgia, serif;
+  margin-bottom: 10px;
+}
+header {
+  background: #95b64f;
+  width: 100%;
+  height: 80px;
+}
+header hgroup {
+  float: left;
+  margin: 20px 0 0 50px;
+}
+header hgroup h1 {
+  float: left;
+}
+header hgroup h2 {
+  float: left;
+  font: 13pt Georgia, serif;
+  margin: 20px 0 0 10px;
+  font-size: 14pt;
+}
+header #searchbar {
+  float: right;
+  font: 13pt Georgia, serif;
+  size: 50;
+  margin: 40px 110px 0 0;
+}
+#content {
+  width: 100%;
+  float: left;
+}
+#content #force {
+  float: left;
+  border-right: 1px solid #505050;
+}
+#content #force #progressbar {
+  float: left;
+}
+#content #force .nodetext {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  font: 10px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+#content #force .node {
+  cursor: pointer;
+}
+#content #force .node:hover circle {
+  fill: #acd058;
+}
+#content #force .node.active circle {
+  fill: #cd1f00;
+}
+#content #force .node.active text {
+  fill: #BBBBBB;
+}
+#content #force .node circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+  fill: #87A347;
+}
+#content #force .node text {
+  fill: #505050;
+}
+#content #force line .link {
+  stroke: #999;
+  stroke-opacity: 1;
+}
+#content aside {
+  float: right;
+  width: 400px;
+}
+#content aside #piesection {
+  margin-top: 20px;
+  height: 400px;
+  width: 355px;
+  padding-left: 45px;
+  border-bottom: 1px solid #505050;
+}
+#content aside #piesection #pie {
+  width: 100%;
+  height: 250px;
+}
+#content aside #piesection #pie .arc {
+  cursor: pointer;
+  border: 3px;
+  box-shadow: 3px 3px 4px #000000;
+  -moz-box-shadow: 3px 3px 4px #000000;
+  -webkit-box-shadow: 3px 3px 4px #000000;
+  -o-box-shadow: 3px 3px 4px #000000;
+  opacity: .9;
+  transition: opacity 0.1s ease-out;
+  -webkit-transition: opacity 0.1s ease-out;
+  -moz-transition: opacity 0.1s ease-out;
+  -o-transition: opacity 0.1s ease-out;
+}
+#content aside #piesection #pie .arc:hover {
+  opacity: .7;
+  transition: opacity 0.1s ease-in;
+  -webkit-transition: opacity 0.1s ease-in;
+  -moz-transition: opacity 0.1s ease-in;
+  -o-transition: opacity 0.1s ease-in;
+}
+#content aside #piesection #pie .arc text {
+  font: 10px sans-serif;
+}
+#content aside #piesection #pieselection {
+  width: 100%;
+  height: 100px;
+  font: 10px sans-serif;
+}
+#content aside #barsection {
+  width: 100%;
+}
+#content aside #barsection h3 {
+  margin: 10px 0 0 10px;
+}
+#content aside #barsection #bar text {
+  font: 10px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  color: #505050;
+}
+#content aside #barsection progress {
+  display: none;
+}

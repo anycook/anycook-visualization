@@ -41,8 +41,8 @@ function barChart(name){
 		var chart = d3.select("#bar")
 			.append("svg:svg")
 			.attr("class", "chart")
-			.attr("width", w * data.length - 1)
-			.attr("height", h);
+			.attr("width", w * 11)
+			.attr("height", h+100);
 	
 		chart.selectAll("rect")
 			.data(data)
@@ -75,9 +75,8 @@ function barChart(name){
 			.data(data)
 		    .enter().append("svg:text")
 			.attr("transform", function(d, i) {
-				return "translate("+x(i)+",50) rotate(90,0,0)";
+				return "translate("+x(i)+","+h+") rotate(40,0,0)";
 		    	})
-			.attr("y", 100)
 		    .attr("dy", ".35em")
 			.attr("dy", ".35em")
 			//.attr("text-anchor", "middle")
