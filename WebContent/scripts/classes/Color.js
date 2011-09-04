@@ -1,8 +1,10 @@
 function DataColor(){
 	this.colors = [];
+	this.grayscale = [];
 	this.highlightcolors = [];
 	this.pointer = 0;
 	this.hpointer = 1;
+	this.gpointer = 0;
 }
 
 DataColor.prototype.init = function(){
@@ -22,23 +24,18 @@ DataColor.prototype.init = function(){
 	var r = i * 0.81,
 	g = i,
 	b = i * 0.43;
-	
-	for(i = 1; i<11; i+=1){
-		r += 4.8;
-		b += 14;
-		console.log("bla"+r+" "+g+" "+b);
-		var colorgray = "#"+ d2h(r-i*10)  + d2h(g-i*10) + d2h(b-i*10);
-		this.colors.push(colorgray);
-	}*/
+	*/
 	
 	for(i = 200; i<256; i=i+5){
 		var colorred = "#"+ d2h(i)  + d2h(i * 0.15) + "00";
 		this.highlightcolors.push(colorred);
 	}
 	
-	
-	
-	
+	for(i = 80; i<250; i+=10){
+		var colorvalue = d2h(i);
+		var colorgray = "#"+ colorvalue  + colorvalue + colorvalue;
+		this.grayscale.push(colorgray);
+	}
 	
 	console.log(this.colors);
 };
@@ -56,6 +53,14 @@ DataColor.prototype.getNextHighlightColor = function(){
 	this.hpointer +=1;
 	if(this.hpointer == this.highlightcolors.length)
 		this.hpointer = 0;
+	return color;
+};
+
+DataColor.prototype.getNextGrayscale = function(){
+	var color =  this.grayscale[this.gpointer];
+	this.gpointer +=1;
+	if(this.hpointer == this.grayscale.length)
+		this.gpointer = 0;
 	return color;
 };
 

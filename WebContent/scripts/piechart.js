@@ -143,6 +143,7 @@ function drawPie(name){
 			$("#pieselection").text("");
 		})
 		.on("click", function(d,i){
+			barChart(names[i]);
 			if(i==0 && name != undefined)
 				drawPie(piedata.parentname);
 			else
