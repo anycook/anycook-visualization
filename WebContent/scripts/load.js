@@ -1,3 +1,5 @@
+//data
+
 function getData(fieldname){
 	if(!$("body").data("data")){
 		$("body").data("data", {		
@@ -8,9 +10,10 @@ function getData(fieldname){
 			recipeMap : {},
 			linkMap : {},
 			recipeMax : [],
-			ingredients : [],
-			ingredientMap:{},
-			ingredientNames:[]
+			ingredients : [], //ingredient object tree
+			ingredientMap:{}, //ingredients by name
+			ingredientNames:[], // just the names
+			ingredientRecipeMap:{}
 		});
 	}
 	
@@ -30,6 +33,9 @@ function setData(optionskey, value){
 		jQuery.extend(data, optionskey);	 
 	$("body").data("data", data);
 }
+
+
+//ingredients
 
 function getAllIngredients(){
 	return $.getJSON("http://graph.anycook.de/ingredient&callback=?");
@@ -96,4 +102,36 @@ function loadData(){
 }
 
 var index = 0;
+
+//recipes
+
+
+function loadRecipesByIngredient(ingredient){
+	
+	var ingredientRecipeMap = getData("ingredientRecipeMap");
+	if(ingredientRecipeMap[ingredient] == undefined){
+		var dfd = $.Deferred();
+		var recipeData = [];
+		var recipes = getData("ingredientMap").recipes;
+		for(var i in recipes){
+			$.when(loadRecipe(recipes[i])).done(function(recipe){
+				recipeData.push(recipe);				
+				if(recipeData.length == recipes.length){
+					ingredientRecipeMap[ingredient] = recipeData;
+					setData("ingredientRecipeMap", ingredientRecipeMap);
+					dfd.resolve(ingredientRecipeMap[ingredient]);
+				}
+			});
+		}
+		
+		return dfd.promise();
+		
+	}
+	return ingredientRecipeMap[ingredient];
+	
+}
+
+function loadRecipe(recipeName){
+	return $.getJSON("http://graph.anycook.de/recipe/"+recipeName+"?callback=?");	
+}
 
