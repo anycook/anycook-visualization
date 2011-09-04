@@ -1,9 +1,11 @@
 //colors
 @anycookgreen: #95b64f;
+@charttextgrey: #505050;
 
 //fonts
 @headlinefont: 13pt Georgia, serif;
 @standardfont: 10pt "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+@chartfont: 10px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 
 //borders
 @sectionborder: 1px solid #505050;
@@ -88,7 +90,8 @@ header{
 			pointer-events: auto !important;
 			cursor: pointer !important;
 			//pointer-events: none; 
-			font: 10px sans-serif;
+			font: @chartfont;
+			
 		}
 		
 		.node{
@@ -115,7 +118,7 @@ header{
 			}
 			
 			text{
-				fill:#505050;
+				fill:@charttextgrey;
 			}
 		}
 		
@@ -167,6 +170,16 @@ header{
 			
 		#barsection{
 			width:100%;
+			h3{
+				margin:10px 0 0 10px;
+			}
+			#bar{
+				text{
+					font:@chartfont;
+					color:@charttextgrey;
+				}
+			}
+			
 			progress{
 				display:none;
 			}
