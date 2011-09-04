@@ -170,10 +170,24 @@ header{
 			
 		#barsection{
 			width:100%;
+			padding-top:10px;
 			h3{
-				margin:10px 0 0 10px;
+				margin:0 0 0 10px;
+				float:left;
 			}
 			#bar{
+				clear:both;
+				rect{
+					cursor:pointer;
+					opacity:1;
+					.transition(opacity, 0.1s, ease-out);
+					&:hover{
+						opacity:.8;
+						.transition(opacity, 0.1s, ease-in);
+						
+					}				
+				}
+				
 				text{
 					font:@chartfont;
 					color:@charttextgrey;
@@ -181,6 +195,8 @@ header{
 			}
 			
 			progress{
+				margin:5px 0 0 10px;
+				float:left;
 				display:none;
 			}
 		}

@@ -14,9 +14,7 @@ $(document).ready(function(){
 	progressh = $("#progressbar").height();
 	$("#progressbar").css({marginLeft: forcew/2-progressw/2, marginTop: forceh/2-progressh/2});
 	
-	loadCategories();
-	
-	$.when(loadData()).done(function(){
+	$.when(loadData(), loadCategories()).done(function(){
 		//data has been loaded. init graphs HERE
 		
 		$("#progressbar").remove();

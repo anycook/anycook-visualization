@@ -149,7 +149,7 @@ function loadRecipe(recipeName){
 function loadCategories(){
 	var dfd = $.Deferred();
 	
-	$.when($.getJSON("http://graph.anycook.de/categories/?callback=?")).done(function(json){
+	$.when($.getJSON("http://graph.anycook.de/category/?callback=?")).done(function(json){
 		var categories = json.categories;
 		setData("categories", categories);
 		dfd.resolve();
