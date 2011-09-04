@@ -77,6 +77,10 @@ function makePieData(name){
 
 
 function drawPie(name){
+	if(name===undefined)
+		$("#activeingredient").text("Hauptzutaten");
+	else
+		$("#activeingredient").text(name);
 	
 	var colors = new DataColor();
 	colors.init();
