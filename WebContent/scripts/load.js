@@ -85,12 +85,12 @@ function loadData(){
 	$.when(getAllIngredients()).done(function(all){
 		var ingredients = [];
 		$.when(getIngredients()).done(function(parents){
-			$("progress").attr("max", parents.total);
+			$("#force progress").attr("max", parents.total);
 			for(var i in parents.ingredients)
 				$.when(addIngredient(parents.ingredients[i])).done(function(ingredient){
 					ingredients.push(ingredient);
-					$("progress").val(Number($("progress").val())+1);
-					$("#percentage").text(Math.round((Number($("progress").val())/Number(parents.total))*100));
+					$("#force progress").val(Number($("#force progress").val())+1);
+					$("#percentage").text(Math.round((Number($("#force progress").val())/Number(parents.total))*100));
 					if(ingredients.length == parents.total){
 						setData({total : all.total, ingredients:ingredients, nodestodraw: ingredients});
 						dfd.resolve(ingredients);
@@ -111,14 +111,23 @@ function loadRecipesByIngredient(ingredient){
 	var ingredientRecipeMap = getData("ingredientRecipeMap");
 	if(ingredientRecipeMap[ingredient] == undefined){
 		var dfd = $.Deferred();
+		
+		
 		var recipeData = [];
-		var recipes = getData("ingredientMap").recipes;
+		var recipes = getData("ingredientMap")[ingredient].recipes;
+		var $barprogress = $("#barsection progress").show();
+		$barprogress.attr("max", recipes.length);
+		var $progressspan = $("#barpercentage");
 		for(var i in recipes){
 			$.when(loadRecipe(recipes[i])).done(function(recipe){
-				recipeData.push(recipe);				
+				recipeData.push(recipe);
+				
+				$barprogress.val(recipeData.length);
+				$progressspan.text(Math.round((recipes.length/recipeData.length)*100));
 				if(recipeData.length == recipes.length){
 					ingredientRecipeMap[ingredient] = recipeData;
 					setData("ingredientRecipeMap", ingredientRecipeMap);
+					$barprogress.hide();
 					dfd.resolve(ingredientRecipeMap[ingredient]);
 				}
 			});

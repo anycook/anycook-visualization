@@ -28,6 +28,10 @@ $(document).ready(function(){
 		drawPie();
 		startForce();
 		//resizeContent();
+		
+		$.when(loadRecipesByIngredient("Fett")).done(function(recipes){
+			console.log(recipes);
+		});
 	});
 	
 	
