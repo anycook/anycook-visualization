@@ -8,6 +8,21 @@
 //borders
 @sectionborder: 1px solid #505050;
 
+//functions 
+.transition(@type, @duration, @ease){
+	transition: @type  @duration @ease;
+	-webkit-transition: @type  @duration @ease;
+	-moz-transition: @type  @duration @ease;
+	-o-transition: @type  @duration @ease;
+}
+
+.box-shadow(@right, @bottom, @blur, @color){
+	box-shadow: @right @bottom @blur @color;
+	-moz-box-shadow: @right @bottom @blur @color;
+	-webkit-box-shadow: @right @bottom @blur @color;
+	-o-box-shadow: @right @bottom @blur @color;	
+}
+
 body, div, ul,ol, li, h1,h2,h3,h4, p,th,td,form{
 	margin:0;
 	padding:0;
@@ -55,11 +70,55 @@ header{
 
 #content{
 	width:100%;
+	float:left;
 	#force{
 		float:left;
 		border-right: @sectionborder;
+		
 		#progressbar{
 			float:left;
+		}
+				
+		.nodetext{
+			pointer-events: auto !important;
+			cursor: pointer !important;
+			//pointer-events: none; 
+			font: 10px sans-serif;
+		}
+		
+		.node{
+			cursor:pointer;
+			&:hover{
+				circle{
+					fill: #acd058;
+				}
+			}
+			
+			&.active{
+				circle{
+					fill:#cd1f00;
+				}
+				text{
+					fill: #BBBBBB;
+				}
+			}
+			
+			circle{
+				stroke: #fff;
+  				stroke-width: 1.5px;
+  				fill: #87A347;
+			}
+			
+			text{
+				fill:#505050;
+			}
+		}
+		
+		line{
+			.link{
+				stroke: #999;
+  				stroke-opacity: 1;
+			}
 		}
 	}
 	aside{
@@ -75,8 +134,28 @@ header{
 				width:100%;
 				//float:left;					
 				height:250px;
+				
+				.arc{
+					cursor:pointer;
+					border: 3px;
+					.box-shadow(3px, 3px, 4px, #000);
+					opacity:.9;
+					.transition(opacity, 0.1s, ease-out);
+					
+					&:hover{
+						opacity:.7;
+						.transition(opacity, 0.1s, ease-in);
+					}
+				
+					text{
+						font: 10px sans-serif;
+					}
+				}
 			}
 			#pieselection{
+				width:100%;
+				height:100px;
+				font: 10px sans-serif;
 				//float:left;
 			}
 		}

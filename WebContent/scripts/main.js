@@ -29,9 +29,9 @@ $(document).ready(function(){
 		startForce();
 		//resizeContent();
 		
-		$.when(loadRecipesByIngredient("Fett")).done(function(recipes){
+		/*$.when(loadRecipesByIngredient("Fett")).done(function(recipes){
 			console.log(recipes);
-		});
+		});*/
 	});
 	
 	

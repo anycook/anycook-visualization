@@ -148,9 +148,6 @@ function drawPie(name){
 			else
 				drawPie(names[i], ingredients[i]);
 		});
-	
-	arcs.append("svg:title")
-		.text(function(d,i) { return names[i]; });
 		
 	arcs.append("svg:text")
 	    .attr("transform", function(d) {

@@ -54,7 +54,8 @@ function addIngredient(name, depth){
 	$.when(getIngredients(name)).then(function(json){
 		var ingredient = {
 				name:json.name, 
-				children:[], 
+				children:[],
+				parentName:json.parentName,
 				depth: depth, 
 				recipes: json.recipes, 
 				childrennum:json.children.length, 
