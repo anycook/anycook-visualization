@@ -76,7 +76,7 @@ function makePieData(name){
 
 
 
-function drawPie(name){
+function drawPie(name){	
 	if(name===undefined)
 		$("#activeingredient").text("Hauptzutaten");
 	else
@@ -147,7 +147,7 @@ function drawPie(name){
 			$("#pieselection").text("");
 		})
 		.on("click", function(d,i){
-			barChart(names[i]);
+			bar.redraw(names[i]);
 			if(i==0 && name != undefined)
 				drawPie(piedata.parentname);
 			else

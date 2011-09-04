@@ -1,3 +1,5 @@
+var bar = null;
+
 $(document).ready(function(){
 	$.ajaxSetup({ 
 	    scriptCharset: "utf8" , 
@@ -23,9 +25,12 @@ $(document).ready(function(){
 		makeRecipeMap();
 		makeLinks();
 		initSearchBar();
-		drawPie();
 		startForce();
 		//resizeContent();
+		console.log(getData("categories"));
+		drawPie();
+		bar = new BarChart();
+		bar.init();
 		
 	});
 	
