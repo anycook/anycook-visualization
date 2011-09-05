@@ -33,16 +33,7 @@ BarChart.prototype.init = function(){
 		else
 			dat.push({"amount" : 0, "name" : category});
 	}
-		
-	/*$.each(datamap, function(k, v){
-		if(v > thisObj.max)
-			thisObj.max = v;
-		dat.push({"amount" : v, "name" : k});
-	});
-	
-	dat.sort(function(a, b){
-		return b.amount - a.amount;
-	}); */
+
 	var numCat = thisObj.categoryNames.length;
 	thisObj.colors = new DataColor;
 	thisObj.colors.init();
@@ -172,6 +163,18 @@ BarChart.prototype.redraw = function(name){
 			 	.attr("height", function(d) { 
 			 		return thisObj.y(d.amount); 
 			 		});	 
+			thisObj.chart.selectAll("text")
+				.data(dat)
+		    	.enter().append("svg:text")
+				.attr("transform", function(d, i) {
+					var posy = thisObj.h - thisObj.y(d.amount) - .5;
+					return "translate("+(thisObj.x(i)+thisObj.w/2)+","+ posy +") rotate(40,0,0)";
+			    	})
+			    .attr("dy", ".35em")
+				.attr("dy", ".35em")
+				.text(function(d){
+					return d.amount;
+				});
 		});
 	}
 };
