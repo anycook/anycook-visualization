@@ -14,7 +14,8 @@ function getData(fieldname){
 			ingredientMap:{}, //ingredients by name
 			ingredientNames:[], // just the names
 			ingredientRecipeMap:{},
-			categories: [] // array of category names
+			categoryNames:[], // array of category names
+			categories: [] // array of category objects
 		});
 	}
 	
@@ -146,13 +147,26 @@ function loadRecipe(recipeName){
 	return $.getJSON("http://graph.anycook.de/recipe/"+recipeName+"?callback=?");	
 }
 
+function loadCategory(categoryName){
+	return $.getJSON("http://graph.anycook.de/category/"+categoryName+"?callback=?");
+}
+
 function loadCategories(){
 	var dfd = $.Deferred();
 	
 	$.when($.getJSON("http://graph.anycook.de/category/?callback=?")).done(function(json){
-		var categories = json.categories;
-		setData("categories", categories);
-		dfd.resolve();
+		var categoryNames = json.categories;
+		var categories = [];
+		for(var i in categoryNames){
+			$.when(loadCategory(categoryNames[i])).done(function(category){
+				categories.push(category);
+				if(categories.length == categoryNames.length){
+					setData({categoryNames: categoryNames, categories: categories});
+					dfd.resolve();
+				}
+			});
+		}
+		
 	});
 	
 	return dfd.promise();

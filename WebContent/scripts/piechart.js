@@ -147,11 +147,14 @@ function drawPie(name){
 			$("#pieselection").text("");
 		})
 		.on("click", function(d,i){
-			bar.redraw(names[i]);
-			if(i==0 && name != undefined)
+			if(i==0 && name != undefined){
+				bar.redraw(piedata.parentname);
 				drawPie(piedata.parentname);
-			else
+			}else{
+				bar.redraw(names[i]);
 				drawPie(names[i], ingredients[i]);
+				
+			}
 		});
 		
 	arcs.append("svg:text")
