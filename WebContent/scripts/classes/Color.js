@@ -47,8 +47,6 @@ DataColor.prototype.init = function(){
 		var colorgray = "#"+ colorvalue  + colorvalue + colorvalue;
 		this.sigmoidgrayscales.push(colorgray);
 	}
-	
-	console.log(this.colors);
 };
 
 DataColor.prototype.getNextColor = function(){

@@ -36,7 +36,7 @@ function startForce(){
 		var h = $("#force").height();
 		vis.selectAll("g.node").attr("transform", function(d) {
 			if(d.parentName != undefined){
-				updateChildrenPositions(d.name);
+				updateChildrenPositions(d);
 				return "translate(" + d.x+ "," + d.y + ")";;
 			}
 			
@@ -56,7 +56,7 @@ function startForce(){
 			d.x = x;
 			d.y = y;
 			
-			updateChildrenPositions(d.name);
+			updateChildrenPositions(d);
 			
 			return "translate(" + x+ "," + y + ")"; });
 		
@@ -71,19 +71,11 @@ function startForce(){
 	restartForce();
 	
 	function updateChildrenPositions(ingredient){
-		var ingmap = getData("ingredientMap");
-		var nodeindex = ingmap[ingredient].index;
-		var node = nodes[nodeindex];
-		var noderadius = getRadius(node.recipenum);
-		var radiusse = [];
-		var maxradius = 0;
-		for(var i in node.children){
-			var child = node.children[i];
-			var radius = getRadius(child.recipenum);
-			radiusse[i] = radius;
-			if(maxradius < radius)
-				maxradius = radius;
-		}
+		//var ingmap = getData("ingredientMap");
+		//var nodeindex = ingmap[ingredient].index;
+		var node = nodes[ingredient.index];
+		var noderadius = getRadius(ingredient.recipenum);
+		var maxradius = getMaxRadius(ingredient);
 		
 		for(var i in node.children){
 			var angle = (2*Math.PI / node.children.length) * i;
@@ -94,6 +86,19 @@ function startForce(){
 			childnode.y = node.y + ( noderadius + maxradius + 50 ) * Math.sin(angle);
 		}
 	}
+}
+
+function getMaxRadius(ingredient){
+	var maxradius = 0;
+	var radiusse = [];
+	for(var i in ingredient.children){
+		var child = ingredient.children[i];
+		var radius = getRadius(child.recipenum);
+		radiusse[i] = radius;
+		if(maxradius < radius)
+			maxradius = radius;
+	}
+	return maxradius;
 }
 
 function restartForce(){
@@ -175,11 +180,17 @@ function clickIngredient(ingredient, i){
 		removeChilds(ingredient);
 	}
 	else{
+		var maxradius = getMaxRadius(ingredient);
+		var circleradius = getRadius(ingredient.recipenum)+2*maxradius+50;
 		d3.select(".active").classed("active", false); 
-		d3.select(this).classed("active", true);
+		d3.select(this)
+		.classed("active", true)
+		.insert("svg:circle", "circle")
+		.classed("group", true)
+		.attr("r", circleradius);
 		drawPie(ingredient.name);
 		drawLinks(ingredient, i);
-		addChilds(ingredient);
+		addChilds(ingredient, i);
 	}
 		
 	//restartForce();
@@ -215,12 +226,13 @@ function getRadius(recipenum){
 	return 2+recipenum/2;
 }
 
-function addChilds(ingredient){
+function addChilds(ingredient, i){
 	var nodestodraw = getData("nodestodraw");
 	//var ingredientMap = getData("ingredientMap");
 	for(var i in ingredient.children){
 		nodestodraw.push(ingredient.children[i]);
 	}
+	//.append("svg:circle");
 	setData("nodestodraw", nodestodraw);
 	makeRecipeMap();
 	makeLinks();
