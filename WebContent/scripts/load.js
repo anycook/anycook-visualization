@@ -50,7 +50,7 @@ function getIngredients(ingredient){
 		return $.getJSON("http://graph.anycook.de/ingredient/"+ingredient+"?children&callback=?");
 }
 
-function addIngredient(name, depth){
+function addIngredient(name){
 	var dfd = $.Deferred();
 	
 	$.when(getIngredients(name)).then(function(json){
@@ -58,7 +58,6 @@ function addIngredient(name, depth){
 				name:json.name, 
 				children:[],
 				parentName:json.parentName,
-				depth: depth, 
 				recipes: json.recipes, 
 				childrennum:json.children.length, 
 				recipenum:json.recipenum};
@@ -67,11 +66,10 @@ function addIngredient(name, depth){
 			dfd.resolve(ingredient);
 		else{
 			for(var i in json.children){
-				$.when(addIngredient(json.children[i]), depth+1).done(function(children){
+				$.when(addIngredient(json.children[i])).done(function(children){
 					children.parentName = name;
 					ingredient.children.push(children);
-					if(ingredient.children.length == json.children.length){
-						
+					if(ingredient.children.length == json.children.length){						
 						dfd.resolve(ingredient);
 					}
 				});
@@ -95,7 +93,7 @@ function loadData(){
 					$("#force progress").val(Number($("#force progress").val())+1);
 					$("#percentage").text(Math.round((Number($("#force progress").val())/Number(parents.total))*100));
 					if(ingredients.length == parents.total){
-						setData({total : all.total, ingredients:ingredients, nodestodraw: ingredients});
+						setData({total : all.total, ingredients:ingredients, nodestodraw: ingredients.slice()});
 						dfd.resolve(ingredients);
 					}
 				});			

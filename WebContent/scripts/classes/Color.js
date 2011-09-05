@@ -1,10 +1,12 @@
 function DataColor(){
 	this.colors = [];
 	this.grayscale = [];
+	this.sigmoidgrayscales = [];
 	this.highlightcolors = [];
 	this.pointer = 0;
 	this.hpointer = 1;
 	this.gpointer = 0;
+	this.sgpointer = 0;
 }
 
 DataColor.prototype.init = function(){
@@ -37,6 +39,15 @@ DataColor.prototype.init = function(){
 		this.grayscale.push(colorgray);
 	}
 	
+	
+	
+	for(i = 80; i<250; i+=3){
+		var value = 250/(1+Math.exp(-3*Math.log(i)+14));
+		var colorvalue = d2h(Math.round(value));
+		var colorgray = "#"+ colorvalue  + colorvalue + colorvalue;
+		this.sigmoidgrayscales.push(colorgray);
+	}
+	
 	console.log(this.colors);
 };
 
@@ -59,8 +70,16 @@ DataColor.prototype.getNextHighlightColor = function(){
 DataColor.prototype.getNextGrayscale = function(){
 	var color =  this.grayscale[this.gpointer];
 	this.gpointer +=1;
-	if(this.hpointer == this.grayscale.length)
+	if(this.gpointer == this.grayscale.length)
 		this.gpointer = 0;
+	return color;
+};
+
+DataColor.prototype.getNextSigmoidGrayscale = function(){
+	var color =  this.sigmoidgrayscales[this.sgpointer];
+	this.sgpointer +=1;
+	if(this.sgpointer == this.sigmoidgrayscales.length)
+		this.sgpointer = 0;
 	return color;
 };
 

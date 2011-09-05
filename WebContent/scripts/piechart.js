@@ -120,7 +120,7 @@ function drawPie(name){
 		.attr("fill", function(d, i) {
 			if(names[i]==name)
 				return colors.getNextHighlightColor();
-			return colors.getNextColor();
+			return colors.getNextSigmoidGrayscale();
 			})
 		.attr("stroke", "white")
 		.attr("stroke-width", function(d, i){
