@@ -33,7 +33,7 @@ function startForce(){
 		var h = $("#force").height();
 		vis.selectAll("g.node").attr("transform", function(d) {
 			var ingmap = getData("ingredientMap");
-			var curnode = ingmap[d.name]
+			var curnode = ingmap[d.name];
 			if(curnode.parentName != undefined){
 				var parindex = ingmap[d.parentName].index;
 			}

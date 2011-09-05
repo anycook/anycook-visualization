@@ -68,7 +68,7 @@ function addIngredient(name, depth){
 		else{
 			for(var i in json.children){
 				$.when(addIngredient(json.children[i]), depth+1).done(function(children){
-					children.parentname = name;
+					children.parentName = name;
 					ingredient.children.push(children);
 					if(ingredient.children.length == json.children.length){
 						
