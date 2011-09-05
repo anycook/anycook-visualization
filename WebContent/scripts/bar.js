@@ -84,10 +84,25 @@ BarChart.prototype.init = function(){
 			return "translate("+(thisObj.x(i)+thisObj.w/2)+","+(thisObj.h+3)+") rotate(40,0,0)";
 	    	})
 	    .attr("dy", ".35em")
-		.attr("dy", ".35em")
 		.text(function(d){
 			return d.name;
 		});
+	
+	thisObj.chart
+	.selectAll("text.amount")
+	.data(dat).enter()
+	.append("svg:text")
+	.attr("class", "amount")
+	.attr("transform", function(d, i) {
+		var posy = thisObj.h - thisObj.y(d.amount) -5;
+		return "translate("+(thisObj.x(i)+thisObj.w/2)+","+ posy +")";
+    	})
+    .attr("text-anchor", "middle")
+    .attr("dy", ".35em")
+	.attr("width", "33.3px")
+	.text(function(d){			
+			return d.amount;
+	});
 		
 };
 
@@ -129,6 +144,19 @@ BarChart.prototype.redraw = function(name){
 		 	.attr("height", function(d) { 
 		 		return thisObj.y(d.amount); 
 		 });
+		
+		thisObj.chart
+		.selectAll("text.amount")
+		.data(dat)
+		.transition()
+		.duration(1000)
+		.attr("transform", function(d, i) {
+			var posy = thisObj.h - thisObj.y(d.amount) -5;
+			return "translate("+(thisObj.x(i)+thisObj.w/2)+","+ posy +")";
+	    })
+	    .text(function(d){
+	    	return d.amount;
+	    });
 	}else{
 		$.when(loadRecipesByIngredient(name)).done(function(recipes){
 			for(var i in recipes){
@@ -162,19 +190,22 @@ BarChart.prototype.redraw = function(name){
 			 		})
 			 	.attr("height", function(d) { 
 			 		return thisObj.y(d.amount); 
-			 		});	 
-			thisObj.chart.selectAll("text")
-				.data(dat)
-		    	.enter().append("svg:text")
-				.attr("transform", function(d, i) {
-					var posy = thisObj.h - thisObj.y(d.amount) - .5;
-					return "translate("+(thisObj.x(i)+thisObj.w/2)+","+ posy +") rotate(40,0,0)";
-			    	})
-			    .attr("dy", ".35em")
-				.attr("dy", ".35em")
-				.text(function(d){
-					return d.amount;
-				});
+			 		});
+			
+			thisObj.chart
+			.selectAll("text.amount")
+			.data(dat)
+			.transition()
+			.duration(1000)
+			.attr("transform", function(d, i) {
+				var posy = thisObj.h - thisObj.y(d.amount) -5;
+				return "translate("+(thisObj.x(i)+thisObj.w/2)+","+ posy +")";
+		    })
+		    .text(function(d){
+		    	return d.amount;
+		    });
+			
+			
 		});
 	}
 };
