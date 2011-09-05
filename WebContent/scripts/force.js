@@ -21,9 +21,12 @@ function startForce(){
 	force = d3.layout.force()
 	.nodes(nodes)
     .links(links)
-	//.charge(-400)
+	.charge(-30)
 	.linkDistance(500)
-	.linkStrength(function(link){return Math.log(link.count)/10;})
+	.linkStrength(function(link){
+		if(link.target.parentName==undefined && link.source.parentName==undefined)
+			return Math.log(link.count)/10;
+		return 0;})
 	.gravity(0.2)
 	//.theta(0.01)	
     .size([w, h]);
@@ -32,10 +35,8 @@ function startForce(){
 		var w = $("#force").width();
 		var h = $("#force").height();
 		vis.selectAll("g.node").attr("transform", function(d) {
-			var ingmap = getData("ingredientMap");
-			var curnode = ingmap[d.name];
-			if(curnode.parentName != undefined){
-				var parindex = ingmap[d.parentName].index;
+			if(d.parentName != undefined){
+				return "translate(" + d.x+ "," + d.y + ")";;
 			}
 			
 			var x = d.x;
@@ -53,6 +54,9 @@ function startForce(){
 			
 			d.x = x;
 			d.y = y;
+			
+			updateChildrenPositions(d.name);
+			
 			return "translate(" + x+ "," + y + ")"; });
 		
 		vis.selectAll("line.link")
@@ -64,6 +68,31 @@ function startForce(){
 		
 	});
 	restartForce();
+	
+	function updateChildrenPositions(ingredient){
+		var ingmap = getData("ingredientMap");
+		var nodeindex = ingmap[ingredient].index;
+		var node = nodes[nodeindex];
+		var noderadius = getRadius(node.recipenum);
+		var radiusse = [];
+		var maxradius = 0;
+		for(var i in node.children){
+			var child = node.children[i];
+			var radius = getRadius(child.recipenum);
+			radiusse[i] = radius;
+			if(maxradius < radius)
+				maxradius = radius;
+		}
+		
+		for(var i in node.children){
+			var angle = (2*Math.PI / node.children.length) * i;
+			
+			var child = node.children[i];
+			var childnode = nodes[child.index];
+			childnode.x = node.x + ( noderadius + maxradius + 50 )* Math.cos(angle);
+			childnode.y = node.y + ( noderadius + maxradius + 50 ) * Math.sin(angle);
+		}
+	}
 }
 
 function restartForce(){
