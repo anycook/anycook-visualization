@@ -2,7 +2,7 @@ function BarChart(){
 	this.chart = null;
 	this.max = 0;
 	this.colors = null;
-	this.categories = null;
+	this.categories = [];
 	this.h = 0;
 	this.w = 0;
 	this.x = null;
@@ -24,7 +24,19 @@ BarChart.prototype.init = function(){
 				datamap[recipe.categorie] += 1;
 		}
 		
-		$.each(datamap, function(k, v){
+		for(var i in thisObj.categories){
+			var category = thisObj.categories[i];
+			var value = datamap[category];			
+			if(value != null){
+				if(value > thisObj.max)
+					thisObj.max = value;
+				dat.push({"amount" : value, "name" : category});
+			}				
+			else
+				dat.push({"amount" : 0, "name" : category});
+		}
+		
+		/*$.each(datamap, function(k, v){
 			if(v > thisObj.max)
 				thisObj.max = v;
 			dat.push({"amount" : v, "name" : k});
@@ -32,10 +44,11 @@ BarChart.prototype.init = function(){
 		
 		dat.sort(function(a, b){
 			return b.amount - a.amount;
-		});
+		}); */
+		var numCat = thisObj.categories.length;
 		thisObj.colors = new DataColor;
 		thisObj.colors.init();
-		thisObj.w = 400 / 11,
+		thisObj.w = 400 / (numCat+1),
 		thisObj.h = 200,
 		thisObj.x = d3.scale.linear().domain([0,1]).range([0, thisObj.w]),
 		thisObj.y = d3.scale.linear().domain([0,thisObj.max]).range([0, thisObj.h - 40]);
@@ -44,7 +57,7 @@ BarChart.prototype.init = function(){
 		thisObj.chart = d3.select("#bar")
 			.append("svg:svg")
 			.attr("class", "chart")
-			.attr("width", thisObj.w * 11)
+			.attr("width", thisObj.w * (numCat+1))
 			.attr("height", thisObj.h+100);
 	
 		thisObj.chart.selectAll("rect")
@@ -56,12 +69,13 @@ BarChart.prototype.init = function(){
 			.attr("x", function(d, i) { 
 				return thisObj.x(i) - .5; 
 				})
+			.attr("width", thisObj.w)
+			.attr("height", 0)
 			.transition()
 			.duration(1000)
 			.attr("y", function(d) { 
 				return thisObj.h - thisObj.y(d.amount) - .5; 
 				})
-			.attr("width", thisObj.w)
 			.attr("height", function(d) { 
 				return thisObj.y(d.amount); 
 				});
@@ -93,6 +107,7 @@ BarChart.prototype.init = function(){
 	
 BarChart.prototype.redraw = function(name){
 	var dat = [];
+	this.max = 0;
 	var thisObj = this;
 	$.when(loadRecipesByIngredient(name)).done(function(recipes){
 		var datamap = {};
@@ -104,15 +119,17 @@ BarChart.prototype.redraw = function(name){
 				datamap[recipe.categorie] += 1;
 		}
 		
-		$.each(datamap, function(k, v){
-			if(v > thisObj.max)
-				thisObj.max = v;
-			dat.push({"amount" : v, "name" : k});
-		});
-		
-		dat.sort(function(a, b){
-			return b.amount - a.amount;
-		});
+		for(var i in thisObj.categories){
+			var category = thisObj.categories[i];
+			var value = datamap[category];			
+			if(value != null){
+				if(value > thisObj.max)
+					thisObj.max = value;
+				dat.push({"amount" : value, "name" : category});
+			}				
+			else
+				dat.push({"amount" : 0, "name" : category});
+		}
 		
 		thisObj.y = d3.scale.linear().domain([0,thisObj.max]).range([0, thisObj.h - 40]);
 	

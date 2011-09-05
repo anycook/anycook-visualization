@@ -27,7 +27,6 @@ $(document).ready(function(){
 		initSearchBar();
 		startForce();
 		//resizeContent();
-		console.log(getData("categories"));
 		drawPie();
 		bar = new BarChart();
 		bar.init();
