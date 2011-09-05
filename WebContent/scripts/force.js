@@ -36,6 +36,7 @@ function startForce(){
 		var h = $("#force").height();
 		vis.selectAll("g.node").attr("transform", function(d) {
 			if(d.parentName != undefined){
+				updateChildrenPositions(d.name);
 				return "translate(" + d.x+ "," + d.y + ")";;
 			}
 			
