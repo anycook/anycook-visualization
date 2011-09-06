@@ -44,6 +44,10 @@ function resizeContent(){
 	
 	$("#force>svg").width($("#force").width()).height($("#force").height());
 	
+	
+//	var barheight = $(document).height()-($("header").outerHeight()+$("#piesection").outerHeight());
+//	$("#barsection").height(barheight);
+	
 	restartForce();
 	
 }
