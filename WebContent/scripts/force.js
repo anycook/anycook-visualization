@@ -254,7 +254,15 @@ function removeChilds(ingredient){
 	var nodestodraw = getData("nodestodraw");
 	var positions = [];
 	var ingredientname = ingredient.name;
-	var children = getData("childrenMap")[ingredient.name];
+	var children = getData("childrenMap")[ingredientname];
+	
+	var ingredientNode = vis.selectAll("g.node").filter(function(d, i){
+		if(d.name == ingredientname)
+			return true;
+		return false;
+	});
+	var circle =  ingredientNode.select("circle.group");
+	circle[0].remove();
 	
 	
 	for(var i in nodestodraw){
@@ -270,12 +278,6 @@ function removeChilds(ingredient){
 			}).remove();
 		}	
 	}
-	
-	vis.selectAll("g.node").filter(function(d, i){
-		if(d.name == ingredientname)
-			return true;
-		return false;
-	}).selectAll("circle.group").remove();
 	
 	while(positions.length>0)
 		nodestodraw.splice(positions.pop(), 1);
