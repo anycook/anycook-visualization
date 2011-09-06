@@ -1,42 +1,3 @@
-//data
-
-function getData(fieldname){
-	if(!$("body").data("data")){
-		$("body").data("data", {		
-			nodes: [],
-			nodestodraw : [],
-			links : [],
-			total : 0,
-			recipeMap : {},
-			linkMap : {},
-			recipeMax : [],
-			ingredients : [], //ingredient object tree
-			ingredientMap:{}, //ingredients by name
-			ingredientNames:[], // just the names
-			ingredientRecipeMap:{},
-			categoryNames:[], // array of category names
-			categories: [] // array of category objects
-		});
-	}
-	
-	if(fieldname == undefined)	
-		return $("body").data("data");
-	else
-		return $("body").data("data")[fieldname];
-}
-
-function setData(optionskey, value){
-	var data = getData();
-	
-	
-	if(typeof optionskey == "string" && value != undefined)
-		data[optionskey] = value;
-	else if(typeof optionskey == "object")
-		jQuery.extend(data, optionskey);	 
-	$("body").data("data", data);
-}
-
-
 //ingredients
 
 function getAllIngredients(){
@@ -170,5 +131,31 @@ function loadCategories(){
 	});
 	
 	return dfd.promise();
+}
+
+function makeChildrenMap(){
+	var ingredientMap = getData("ingredientMap");
+	var childrenMap = {};
+	for(var ingredientName in ingredientMap){
+		var children = getChildrenNames(ingredientMap[ingredientName]);
+		children.splice(children.length-1, 1);
+		childrenMap[ingredientName] = children;
+	}
+	setData("childrenMap", childrenMap);
+}
+
+function getChildrenNames(ingredient){
+	var children = [];
+	if(ingredient.children.length > 0){
+		for(var c in ingredient.children){
+			var newChildren = getChildrenNames(ingredient.children[c]);
+			for(var i in newChildren)
+				children.push(newChildren[i]);
+		}
+	}
+	children.push(ingredient.name);
+	
+	return children;
+	
 }
 

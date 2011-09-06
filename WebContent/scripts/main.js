@@ -24,6 +24,7 @@ $(document).ready(function(){
 		makeNodes();
 		makeRecipeMap();
 		makeLinks();
+		makeChildrenMap();
 		initSearchBar();
 		startForce();
 		//resizeContent();
@@ -50,6 +51,11 @@ function resizeContent(){
 	
 	restartForce();
 	
+}
+
+function updateViews(name){
+	drawPie(name);
+	bar.redraw(name);
 }
 
 function initSearchBar(){
