@@ -129,6 +129,8 @@ function loadRecipesByIngredient(ingredient){
 					ingredientRecipeMap[ingredient] = recipeData;
 					setData("ingredientRecipeMap", ingredientRecipeMap);
 					$barprogress.hide();
+					$barprogress.val(0).attr("max", 1);
+					$progressspan.text(0);
 					dfd.resolve(ingredientRecipeMap[ingredient]);
 				}
 			});
