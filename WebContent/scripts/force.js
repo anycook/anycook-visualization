@@ -262,7 +262,7 @@ function removeChilds(ingredient){
 		return false;
 	});
 	var circle =  ingredientNode.select("circle.group");
-	circle[0].remove();
+	$(circle[0]).remove();
 	
 	
 	for(var i in nodestodraw){
