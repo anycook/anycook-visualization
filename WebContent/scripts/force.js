@@ -196,6 +196,9 @@ function clickIngredient(ingredient, i){
 		.classed("active", true)
 		.insert("svg:circle", "circle")
 		.classed("group", true)
+		.attr("r", 0)
+		.transition()
+		.duration(1500)
 		.attr("r", circleradius);
 		drawLinks(ingredient, i);
 		addChilds(ingredient, i);
