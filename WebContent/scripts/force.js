@@ -199,26 +199,34 @@ function clickIngredient(ingredient, i){
 }
 
 function showIngredient(ingredient, i){
+	makeActive(ingredient);
+	
 	var node = vis.selectAll("g.node").filter(function(d, i){
 		if(d.name == ingredient.name) return true;
 		return false;
 	});
 	vis.selectAll("circle.group").remove();	
-	d3.select(".active").classed("active", false);
-	
+	var circleradius = getCircleRadius(ingredient);
 	
 	node
-	.classed("active", true)
 	.insert("svg:circle", "circle")
 	.classed("group", true)
 	.attr("r", 0)
 	.transition()
 	.duration(500)
-	.attr("r",  function(d) {
-		getCircleRadius(d);});
+	.attr("r",  circleradius);
 	addChilds(ingredient, i);
 	drawLinks(ingredient, i);
 	
+}
+
+function makeActive(ingredient){
+	var node = vis.selectAll("g.node").filter(function(d, i){
+		if(d.name == ingredient.name) return true;
+		return false;
+	});
+	d3.select(".active").classed("active", false);
+	node.classed("active", true);
 }
 
 function hideIngredient(ingredient, i){

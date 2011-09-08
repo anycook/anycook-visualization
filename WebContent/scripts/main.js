@@ -94,14 +94,14 @@ function activateIngredient(ingredientName){
 	}
 	
 	if(ingredient.active){
-		deactivateIngredient(ingredientName);
+		makeActive(ingredient);
 	}else{
 		var i = ingredient.index;
-		ingredient.active = true;
 		showIngredient(ingredient, i);
-		drawPie(ingredientName);
-		bar.redraw(ingredientName);		
-	}
+		ingredient.active = true;
+	}	
+	drawPie(ingredientName);
+	bar.redraw(ingredientName);
 	
 }
 

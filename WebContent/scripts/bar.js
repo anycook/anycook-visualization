@@ -215,38 +215,41 @@ BarChart.prototype.redraw = function(name){
 	}
 };
 
+BarChart.prototype.makeRecipeLinks = function(recipes, category){
+	var p = $("#popup p").empty();
+	for(var i in recipes){
+		var recipename;
+		if(typeof recipes[i] == "string" )
+			recipename = recipes[i];
+		else
+			recipename = recipes[i].name;
+		
+		if(recipes[i].categorie == category)
+			p.append("<a href=\"http://anycook.de/#!/recipe/"+recipename+"\" target=\"_blank\">"+
+					"<img src = \"http://graph.anycook.de/recipe/"+recipename+"/image?type=small\">"+
+					"<div>"+recipename+"</div></a>");
+	}
+};
+
 
 BarChart.prototype.showRecipes = function(name, category){
 	if(name == null){
-		var appendtext = "<p>Alle Rezepte aus "+category+"</p>";
+		$("#popup h3").text("Alle Rezepte aus "+category);
 		for(var i in this.categories){
 			if(this.categories[i].name==category){
-				for(var j in this.categories[i].recipes){
-					var recipename = this.categories[i].recipes[j];
-					appendtext += "<a class='rec_entry' href = 'http://anycook.de/#!/recipe/"+recipename+"' target='_blank'>"+
-					"<img class='rec_image' src = 'http://graph.anycook.de/recipe/"+recipename+"/image?type=small'>"+
-					"<div class='rec_desc'>"+recipename+"</div></a>";
-				}
+				this.makeRecipeLinks(this.categories[i].recipes);
 				break;
 			}
 		}
-		$("#popup").html(appendtext);
 		$("#popuplayer").fadeIn(500);
 		$("#popup").fadeIn(500);
 		return;
 	}
 	
+	var thisObj = this;
 	$.when(loadRecipesByIngredient(name)).done(function(recipes){
-		var appendtext = "<p>Rezepte mit Zutat: \""+name+"\" aus "+category+"</p>";
-		for(var i in recipes){
-			var recipe = recipes[i];
-			if(recipe.categorie == category){
-				appendtext += "<a class='rec_entry' href = 'http://anycook.de/#!/recipe/"+recipe.name+"' target='_blank'>"+
-					"<img class='rec_image' src = 'http://graph.anycook.de/recipe/"+recipe.name+"/image?type=small'>"+
-					"<div class='rec_desc'>"+recipe.name+"</div></a>";
-			}				
-		}
-		$("#popup").html(appendtext);
+		$("#popup h3").text("Rezepte mit Zutat: \""+name+"\" aus "+category);
+		thisObj.makeRecipeLinks(recipes, category);			
 		$("#popuplayer").fadeIn(500);
 		$("#popup").fadeIn(500);
 	});
