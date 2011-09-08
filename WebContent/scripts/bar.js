@@ -8,6 +8,7 @@ function BarChart(){
 	this.w = 0;
 	this.x = null;
 	this.y = null;
+	this.ingredientname = null;
 }
 
 BarChart.prototype.init = function(){
@@ -60,6 +61,9 @@ BarChart.prototype.init = function(){
 			})
 		.attr("width", thisObj.w)
 		.attr("height", 0)
+		.on("click", function(d){
+		 		thisObj.showRecipes(thisObj.ingredientname, d.name);
+		 	})
 		.transition()
 		.duration(1000)
 		.attr("y", function(d) { 
@@ -111,6 +115,7 @@ BarChart.prototype.init = function(){
 BarChart.prototype.redraw = function(name){
 	var dat = [];
 	this.max = 0;
+	this.ingredientname = name;
 	var thisObj = this;
 	var datamap = {};
 	
@@ -208,4 +213,41 @@ BarChart.prototype.redraw = function(name){
 			
 		});
 	}
+};
+
+
+BarChart.prototype.showRecipes = function(name, category){
+	if(name == null){
+		var appendtext = "<p>Alle Rezepte aus "+category+"</p>";
+		for(var i in this.categories){
+			if(this.categories[i].name==category){
+				for(var j in this.categories[i].recipes){
+					var recipename = this.categories[i].recipes[j];
+					appendtext += "<a class='rec_entry' href = 'http://anycook.de/#!/recipe/"+recipename+"' target='_blank'>"+
+					"<img class='rec_image' src = 'http://graph.anycook.de/recipe/"+recipename+"/image?type=small'>"+
+					"<div class='rec_desc'>"+recipename+"</div></a>";
+				}
+				break;
+			}
+		}
+		$("#popup").html(appendtext);
+		$("#popuplayer").fadeIn(500);
+		$("#popup").fadeIn(500);
+		return;
+	}
+	
+	$.when(loadRecipesByIngredient(name)).done(function(recipes){
+		var appendtext = "<p>Rezepte mit Zutat: \""+name+"\" aus "+category+"</p>";
+		for(var i in recipes){
+			var recipe = recipes[i];
+			if(recipe.categorie == category){
+				appendtext += "<a class='rec_entry' href = 'http://anycook.de/#!/recipe/"+recipe.name+"' target='_blank'>"+
+					"<img class='rec_image' src = 'http://graph.anycook.de/recipe/"+recipe.name+"/image?type=small'>"+
+					"<div class='rec_desc'>"+recipe.name+"</div></a>";
+			}				
+		}
+		$("#popup").html(appendtext);
+		$("#popuplayer").fadeIn(500);
+		$("#popup").fadeIn(500);
+	});
 };

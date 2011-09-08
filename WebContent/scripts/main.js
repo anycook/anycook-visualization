@@ -34,6 +34,10 @@ $(document).ready(function(){
 		
 	});
 	
+	$("#popuplayer").click(function(){
+		$("#popuplayer").fadeOut(500);
+		$("#popup").fadeOut(500);
+	});
 	
 	
 
