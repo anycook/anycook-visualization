@@ -31,6 +31,7 @@ $(document).ready(function(){
 		drawPie();
 		bar = new BarChart();
 		bar.init();
+		$("#searchbar").fadeIn(100);
 		
 	});
 	
@@ -57,14 +58,65 @@ function resizeContent(){
 	
 }
 
-function updateViews(name){
-	drawPie(name);
-	bar.redraw(name);
-}
-
 function initSearchBar(){
 	var ingredientNames = getData("ingredientNames");
 	$("#searchbar").autocomplete({
-		source:ingredientNames
+		source:ingredientNames,
+		autoFocus:true,
+		select:function(event, ui){
+			$("#searchbar").val("");
+			var text = ui.item.value;
+			activateIngredient(text);
+		}
+		
 	});
+}
+
+function activateIngredient(ingredientName){
+	var ingredientMap = getData("ingredientMap");
+	var nodestodraw = getData("nodestodraw");
+	var ingredient = ingredientMap[ingredientName];
+
+	if($.inArray(ingredient, nodestodraw) == -1){
+		var parent =  ingredientMap[ingredient.parentName];
+		var parents = [parent];
+		while($.inArray(parent, nodestodraw) == -1){
+			parent = ingredientMap[parent.parentName];
+			parents.push(parent);
+		}
+		
+		while(parents.length > 0){
+			var parent = parents.pop();
+			parent.active = true;
+			addChilds(parent, parent.index);			
+		}
+		//drawCircles();
+	}
+	
+	if(ingredient.active){
+		deactivateIngredient(ingredientName);
+	}else{
+		var i = ingredient.index;
+		ingredient.active = true;
+		showIngredient(ingredient, i);
+		drawPie(ingredientName);
+		bar.redraw(ingredientName);		
+	}
+	
+}
+
+function deactivateIngredient(ingredientName){
+	var ingredient = getData("ingredientMap")[ingredientName];
+	var i = ingredient.index;
+	
+	ingredient.active = false;
+	drawPie(ingredient.parentName);
+	bar.redraw(ingredient.parentName);
+	hideIngredient(ingredient, i);
+	
+		
+	
+	//hideIngredient(ingredient, i);
+	
+	//ingredient.active = false;
 }

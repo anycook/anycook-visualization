@@ -148,12 +148,9 @@ function drawPie(name){
 		})
 		.on("click", function(d,i){
 			if(i==0 && name != undefined){
-				bar.redraw(piedata.parentname);
-				drawPie(piedata.parentname);
+				deactivateIngredient(names[i]);
 			}else{
-				bar.redraw(names[i]);
-				drawPie(names[i], ingredients[i]);
-				
+				activateIngredient(names[i]);				
 			}
 		});
 		

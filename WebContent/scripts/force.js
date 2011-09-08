@@ -159,31 +159,14 @@ function restartForce(){
 	
 	vis.selectAll("g.node").on("mouseover", drawLinks)
 	.on("mouseout", mouseOutLinks);
-
-	/*vis.selectAll("line.link")
-	  .data(links)
-	  .enter().insert("svg:line", "circle.node")
-	  .attr("class", "link")
-	  .attr("x1", function(d) { return d.source.x; })
-	  .attr("y1", function(d) { return d.source.y; })
-	  .attr("x2", function(d) { return d.target.x; })
-	  .attr("y2", function(d) { return d.target.y; });
-	
-	vis.selectAll("circle.node")
-	  .data(nodes)
-	  .enter().insert("svg:circle", "circle.cursor")
-	  .attr("class", "node")
-	  .attr("cx", function(d) { return d.x; })
-	  .attr("cy", function(d) { return d.y; })
-	  .attr("r", 5)
-	  .call(force.drag);*/
-	
 	  force.start();
+	  
+	 drawCircles();
 		
 }
 
 function clickIngredient(ingredient, i){
-	if(d3.select(this).selectAll("circle.group")[0].length>0){
+	/*if(d3.select(this).selectAll("circle.group")[0].length>0){
 		d3.select(".active").classed("active", false);    		
 		drawPie(ingredient.parentName);
 		removeChilds(ingredient);
@@ -205,9 +188,60 @@ function clickIngredient(ingredient, i){
 		updateViews(ingredient.name);
 		
 		ingredient.circleradius = circleradius;
-	}
+	}*/
+	
+	if(ingredient.active)
+		deactivateIngredient(ingredient.name);
+	else
+		activateIngredient(ingredient.name);
 	
 	//restartForce();
+}
+
+function showIngredient(ingredient, i){
+	var node = vis.selectAll("g.node").filter(function(d, i){
+		if(d.name == ingredient.name) return true;
+		return false;
+	});
+	vis.selectAll("circle.group").remove();	
+	d3.select(".active").classed("active", false);
+	
+	
+	node
+	.classed("active", true)
+	.insert("svg:circle", "circle")
+	.classed("group", true)
+	.attr("r", 0)
+	.transition()
+	.duration(500)
+	.attr("r",  function(d) {
+		getCircleRadius(d);});
+	addChilds(ingredient, i);
+	drawLinks(ingredient, i);
+	
+}
+
+function hideIngredient(ingredient, i){
+	vis.selectAll(".active").classed("active", false);
+	removeChilds(ingredient);
+	
+	if(ingredient.parentName !== undefined){
+		var parentNode = vis.selectAll("g.node").filter(function(d, i){
+			if(d.name == ingredient.parentName) return true;
+			return false;
+		});
+		parentNode.classed("active", true);
+	}
+}
+
+function getCircleRadius(ingredient){
+	var circleradius = ingredient.circleradius;
+	if(circleradius === undefined){	
+		var maxradius = getMaxRadius(ingredient);
+		circleradius = getRadius(ingredient.recipenum)+2*maxradius+50;
+		ingredient.circleradius = circleradius;
+	}
+	return circleradius;
 }
 
 function drawLinks(ingredient, i){
@@ -247,10 +281,10 @@ function addChilds(ingredient, i){
 		nodestodraw.push(ingredient.children[i]);
 	}
 	//.append("svg:circle");
-	setData("nodestodraw", nodestodraw);
 	makeRecipeMap();
 	makeLinks();
 	restartForce();
+	setData("nodestodraw", nodestodraw);
 }
 
 function removeChilds(ingredient){
@@ -259,23 +293,21 @@ function removeChilds(ingredient){
 	var ingredientname = ingredient.name;
 	var children = getData("childrenMap")[ingredientname];
 	
-	var ingredientNode = vis.selectAll("g.node").filter(function(d, i){
-		if(d.name == ingredientname)
+	vis.selectAll("g.node").filter(function(d, i){
+		if(d.name == ingredient.name)
 			return true;
 		return false;
-	});
-	var circle =  ingredientNode.select("circle.group");
-	$(circle[0]).remove();
-	
+	}).select("circle.group").remove();
 	
 	for(var i in nodestodraw){
-		var name = nodestodraw[i].name;
-		if($.inArray(name, children) != -1){
+		var node = nodestodraw[i];
+		if($.inArray(node.name, children) != -1){
 //			removeChilds(nodestodraw[i]);
+			node.active=false;
 			positions.push(Number(i));
 			vis.selectAll("g.node")
 			.filter(function(d, i){
-				if($.inArray(name, children) != -1)
+				if($.inArray(node.name, children) != -1)
 					return true;
 				return false;
 			}).remove();
@@ -289,6 +321,19 @@ function removeChilds(ingredient){
 	makeRecipeMap();
 	makeLinks();
 	restartForce();
+}
+
+function drawCircles(){
+	//vis.selectAll("circle.group").remove();
+	
+	vis.selectAll("g.node").filter(function(d, i){
+		if(d.active)
+			return true;
+		return false;
+	})
+	.insert("svg:circle", "circle")
+	.classed("group", true)
+	.attr("r", function(d, i) {return  getCircleRadius(d);});
 }
 
 function determineMaxRadius(d){

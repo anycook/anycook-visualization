@@ -85,6 +85,7 @@ header{
 		}
 	}
 	#searchbar{
+		display:none;
 		float:right;
 		font:@headlinefont;
 		size:50;
@@ -302,3 +303,40 @@ header{
 	
 	
 }
+
+	.ui-menu {
+		position: absolute; 
+		cursor: pointer;
+		list-style:none;
+		margin: -15px -5px 0 -15px;
+		display:block;
+		float: left;
+		border: 1pt solid #5a5a5a;
+		border-top: 0;
+		background-color:#ffffff;
+		font:  9pt "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+		
+		.ui-menu-item {
+			margin:0;
+			padding: 0;
+			float: left;
+			clear: left;
+			width: 100%;
+			
+			
+			a{
+				text-decoration:none;
+				display:block;
+				padding:0 .4em;
+				line-height:1.5;
+				zoom:1;
+			
+				&.ui-state-hover, &.ui-state-active {
+					font-weight: normal;
+					background-color: #f7f4f1;
+				}
+			}	
+			
+		}
+	}
+	

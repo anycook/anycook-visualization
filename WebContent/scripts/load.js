@@ -21,7 +21,8 @@ function addIngredient(name){
 				parentName:json.parentName,
 				recipes: json.recipes, 
 				childrennum:json.children.length, 
-				recipenum:json.recipenum};
+				recipenum:json.recipenum,
+				active:false};
 		
 		if(json.children.length == 0)
 			dfd.resolve(ingredient);
