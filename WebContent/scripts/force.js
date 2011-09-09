@@ -213,7 +213,7 @@ function showIngredient(ingredient, i){
 	.classed("group", true)
 	.attr("r", 0)
 	.transition()
-	.duration(500)
+	.duration(1000)
 	.attr("r",  circleradius);
 	addChilds(ingredient, i);
 	drawLinks(ingredient, i);

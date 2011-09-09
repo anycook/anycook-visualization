@@ -234,7 +234,7 @@ BarChart.prototype.makeRecipeLinks = function(recipes, category){
 
 BarChart.prototype.showRecipes = function(name, category){
 	if(name == null){
-		$("#popup h3").text("Alle Rezepte aus "+category);
+		$("#popup h3").text("Alle Rezepte der Kategorie \""+category+"\"");
 		for(var i in this.categories){
 			if(this.categories[i].name==category){
 				this.makeRecipeLinks(this.categories[i].recipes);
@@ -248,7 +248,7 @@ BarChart.prototype.showRecipes = function(name, category){
 	
 	var thisObj = this;
 	$.when(loadRecipesByIngredient(name)).done(function(recipes){
-		$("#popup h3").text("Rezepte mit Zutat: \""+name+"\" aus "+category);
+		$("#popup h3").text("Rezepte der Kategorie \""+category+"\" mit der Zutat \""+name+"\"");
 		thisObj.makeRecipeLinks(recipes, category);			
 		$("#popuplayer").fadeIn(500);
 		$("#popup").fadeIn(500);
