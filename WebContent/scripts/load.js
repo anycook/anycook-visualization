@@ -8,7 +8,7 @@ function getIngredients(ingredient){
 	if(ingredient === undefined)
 		return $.getJSON("http://graph.anycook.de/ingredient?parent&callback=?");
 	else 
-		return $.getJSON("http://graph.anycook.de/ingredient/"+ingredient+"?children&callback=?");
+		return $.getJSON("http://graph.anycook.de/ingredient/"+encodeURIComponent(ingredient.name)+"?children&callback=?");
 }
 
 function addIngredient(name){
@@ -45,7 +45,7 @@ function addIngredient(name){
 function loadData(){
 	var dfd = $.Deferred();
 	
-	$.when(getAllIngredients()).done(function(all){
+	$.when($.anycook.graph.ingredient()).done(function(all){
 		var ingredients = [];
 		$.when(getIngredients()).done(function(parents){
 			$("#force progress").attr("max", parents.total);

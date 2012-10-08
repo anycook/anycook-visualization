@@ -6,6 +6,8 @@ $(document).ready(function(){
 	    contentType: "application/x-www-form-urlencoded; charset=utf8"
 	});
 	
+	
+	
 	resizeContent();
 	$(window).resize(resizeContent);
 	
@@ -16,29 +18,32 @@ $(document).ready(function(){
 	progressh = $("#progressbar").height();
 	$("#progressbar").css({marginLeft: forcew/2-progressw/2, marginTop: forceh/2-progressh/2});
 	
-	$.when(loadData(), loadCategories()).done(function(){
-		//data has been loaded. init graphs HERE
+	$.when($.anycook.graph.init({appid:3})).then(function(){
+		$.when(loadData(), loadCategories()).done(function(){
+			//data has been loaded. init graphs HERE
+			
+			$("#progressbar").remove();
+			makeIngredientMap();
+			makeNodes();
+			makeRecipeMap();
+			makeLinks();
+			makeChildrenMap();
+			initSearchBar();
+			startForce();
+			//resizeContent();
+			drawPie();
+			bar = new BarChart();
+			bar.init();
+			$("#searchbar").fadeIn(100);
+			
+		});
 		
-		$("#progressbar").remove();
-		makeIngredientMap();
-		makeNodes();
-		makeRecipeMap();
-		makeLinks();
-		makeChildrenMap();
-		initSearchBar();
-		startForce();
-		//resizeContent();
-		drawPie();
-		bar = new BarChart();
-		bar.init();
-		$("#searchbar").fadeIn(100);
-		
+		$("#popuplayer").click(function(){
+			$("#popuplayer").fadeOut(500);
+			$("#popup").fadeOut(500);
+		});
 	});
 	
-	$("#popuplayer").click(function(){
-		$("#popuplayer").fadeOut(500);
-		$("#popup").fadeOut(500);
-	});
 	
 	
 
